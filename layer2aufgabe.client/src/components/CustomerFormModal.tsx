@@ -59,7 +59,7 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
         const newErrors: { [key: string]: string } = {};
 
         if (!customer.name) newErrors.name = 'Kundenname ist erforderlich.';
-        if (!customer.code) newErrors.code = 'Kundenkürzel ist erforderlich.';
+        if (!customer.code) newErrors.code = 'Kundenk&#252;rzel ist erforderlich.';
         if (!customer.responsiblePerson) newErrors.responsiblePerson = 'Kundenverantwortlicher ist erforderlich.';
         if (!customer.startDate) newErrors.startDate = 'Startdatum ist erforderlich.';
 
@@ -95,13 +95,13 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>{initialData?.id ? 'Kunden bearbeiten' : 'Kunden hinzufügen'}</Modal.Title>
+                <Modal.Title>{initialData?.id ? 'Kunden bearbeiten' : 'Kunden hinzuf&#252;gen'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form onSubmit={handleSubmit}>
                     {Object.keys(errors).length > 0 && (
                         <Alert variant="danger">
-                            Bitte füllen Sie alle Felder aus.
+                            Bitte f&#252;llen Sie alle Felder aus.
                         </Alert>
                     )}
 
@@ -118,7 +118,7 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="code" className="form-label">Kundenkürzel:</label>
+                        <label htmlFor="code" className="form-label">Kundenk&#252;rzel:</label>
                         <input
                             id="code"
                             name="code"
@@ -155,7 +155,7 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                     </div>
 
                     <Button variant="primary" type="submit">
-                        {initialData?.id ? 'Speichern' : 'Hinzufügen'}
+                        {initialData?.id ? 'Speichern' : 'Hinzuf&#252;gen'}
                     </Button>
                 </form>
             </Modal.Body>

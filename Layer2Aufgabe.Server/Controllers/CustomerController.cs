@@ -18,6 +18,14 @@ public class CustomerController : ControllerBase
         return await _context.Customers.Include(c => c.Projects).ToListAsync();
     }
 
+    /// <remarks>
+    /// Example Request:
+    ///
+    ///     {
+    ///        "id": number
+    ///     }
+    ///
+    /// </remarks>
     [HttpGet("{id}")]
     public async Task<ActionResult<Customer>> GetCustomer(int id)
     {
@@ -42,6 +50,18 @@ public class CustomerController : ControllerBase
         return CreatedAtAction(nameof(GetCustomer), new { id = customer.Id }, customer);
     }
 
+    /// <remarks>
+    /// Example Request:
+    ///
+    ///     {
+    ///        "id": number,
+    ///        "name": "string",
+    ///        "code": "string",
+    ///        "responsiblePerson": "string",
+    ///        "startDate": "2024-09-08T16:57:17.228Z"
+    ///     }
+    ///
+    /// </remarks>
     [HttpPut("{id}")]
     public async Task<IActionResult> PutCustomer(int id, [FromBody] Customer customer)
     {
@@ -81,11 +101,7 @@ public class CustomerController : ControllerBase
 
         return NoContent();
     }
-
-
-    /// <summary>
-    /// Deletes a specific TodoItem.
-    /// </summary> 
+ 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCustomer(int id)
     {

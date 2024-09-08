@@ -34,6 +34,25 @@ public async Task<ActionResult<IEnumerable<Project>>> GetProject()
     return Ok(projects);
 }
 
+    /// <remarks>
+    /// Example Request:
+    ///
+    ///     {
+    ///        "id": number
+    ///     }
+    ///
+    /// </remarks>
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Project>> GetProject(int id)
+    {
+        var project = await _context.Projects.Include(p => p.Customer).FirstOrDefaultAsync(p => p.Id == id);
+        if (project == null)
+        {
+            return NotFound();
+        }
+        return project;
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateProject([FromBody] Project project)
     {
@@ -60,6 +79,19 @@ public async Task<ActionResult<IEnumerable<Project>>> GetProject()
         }
     }
 
+    /// <remarks>
+    /// Example Request:
+    ///
+    ///     {
+    ///        "id": number,
+    ///        "description": "Description",
+    ///        "startDate": "2024-09-08",
+    ///        "endDate": "2024-09-08",
+    ///        "responsiblePerson": "Mustermann Max",
+    ///         "customerId": 0
+    ///     }
+    ///
+    /// </remarks>
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProject(int id, [FromBody] Project project)
     {
@@ -96,6 +128,14 @@ public async Task<ActionResult<IEnumerable<Project>>> GetProject()
         return NoContent();
     }
 
+    /// <remarks>
+    /// Example Request:
+    ///
+    ///     {
+    ///        "id": number
+    ///     }
+    ///
+    /// </remarks>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProject(int id)
     {
