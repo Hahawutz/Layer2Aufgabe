@@ -8,7 +8,6 @@ interface Customer {
     code: string;
     responsiblePerson: string;
     startDate: string;
-    projects: any[];
 }
 
 interface CustomerFormModalProps {
@@ -28,8 +27,7 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
         name: '',
         code: '',
         responsiblePerson: '',
-        startDate: '',
-        projects: [],
+        startDate: ''
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -40,16 +38,14 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 name: initialData.name || '',
                 code: initialData.code || '',
                 responsiblePerson: initialData.responsiblePerson || '',
-                startDate: initialData.startDate || '',
-                projects: initialData.projects || [],
+                startDate: initialData.startDate || ''
             });
         } else if (show && !initialData?.id) {
             setCustomer({
                 name: '',
                 code: '',
                 responsiblePerson: '',
-                startDate: '',
-                projects: [],
+                startDate: ''
             });
         }
     }, [initialData, show]);
@@ -90,7 +86,6 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
             code: customer.code,
             responsiblePerson: customer.responsiblePerson,
             startDate: getISO8601Format(customer.startDate),
-            projects: customer.projects,
         };
 
         await onSubmit(formattedCustomer);
