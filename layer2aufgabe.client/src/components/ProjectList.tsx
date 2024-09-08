@@ -61,12 +61,12 @@ const ProjectList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Fehler beim Hinzufügen des Projekts: ${response.statusText}`);
+                throw new Error(`Fehler beim Hinzuf&#252;gen des Projekts: ${response.statusText}`);
             }
 
             await fetchProjects();
         } catch (error) {
-            console.error('Fehler beim Hinzufügen des Projekts:', error);
+            console.error('Fehler beim Hinzuf&#252;gen des Projekts:', error);
         }
     };
 
@@ -97,12 +97,12 @@ const ProjectList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Fehler beim Löschen des Projekts: ${response.statusText}`);
+                throw new Error(`Fehler beim L&#246;schen des Projekts: ${response.statusText}`);
             }
 
             await fetchProjects();
         } catch (error) {
-            console.error('Fehler beim Löschen des Projekts:', error);
+            console.error('Fehler beim L&#246;schen des Projekts:', error);
         }
     };
 
@@ -127,7 +127,7 @@ const ProjectList: React.FC = () => {
                     className="btn btn-success"
                     onClick={() => handleShowModal()}
                 >
-                    Projekt hinzufügen
+                    Projekt hinzuf&#252;gen
                 </button>
             </div>
             <div className="row">
@@ -154,7 +154,7 @@ const ProjectList: React.FC = () => {
                                             className="btn btn-danger btn-sm"
                                             onClick={() => deleteProject(project.id)}
                                         >
-                                            Löschen
+                                            L&#246;schen
                                         </button>
                                     </div>
                                     {project.customer && (
@@ -182,7 +182,7 @@ const ProjectList: React.FC = () => {
                                                     <td>{project.customer.name}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Kürzel:</strong></td>
+                                                    <td><strong>K&#252;rzel:</strong></td>
                                                     <td>{project.customer.code}</td>
                                                 </tr>
                                                 <tr>

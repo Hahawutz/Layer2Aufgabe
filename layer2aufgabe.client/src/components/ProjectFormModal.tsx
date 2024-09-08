@@ -95,13 +95,13 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>{initialData.id ? 'Projekt bearbeiten' : 'Projekt hinzufügen'}</Modal.Title>
+                <Modal.Title>{initialData.id ? 'Projekt bearbeiten' : 'Projekt hinzuf&#252;gen'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form onSubmit={handleSubmit}>
                     {Object.keys(errors).length > 0 && (
                         <Alert variant="danger">
-                            Bitte füllen Sie alle Felder aus.
+                            Bitte f&#252;llen Sie alle Felder aus.
                         </Alert>
                     )}
 
@@ -180,7 +180,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                     </div>
 
                     <Button variant="primary" type="submit">
-                        {initialData.id ? 'Speichern' : 'Hinzufügen'}
+                        {initialData.id ? 'Speichern' : 'Hinzuf&#252;gen'}
                     </Button>
                 </form>
             </Modal.Body>

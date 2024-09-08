@@ -60,12 +60,12 @@ const CustomerList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Fehler beim Hinzufügen des Kunden: ${response.statusText}`);
+                throw new Error(`Fehler beim Hinzuf&#252;gen des Kunden: ${response.statusText}`);
             }
 
             await fetchCustomers();
         } catch (error) {
-            console.error('Fehler beim Hinzufügen des Kunden:', error);
+            console.error('Fehler beim Hinzuf&#252;gen des Kunden:', error);
         }
     };
 
@@ -96,12 +96,12 @@ const CustomerList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Fehler beim Löschen des Kunden: ${response.statusText}`);
+                throw new Error(`Fehler beim L&#246;schen des Kunden: ${response.statusText}`);
             }
 
             await fetchCustomers();
         } catch (error) {
-            console.error('Fehler beim Löschen des Kunden:', error);
+            console.error('Fehler beim L&#246;schen des Kunden:', error);
         }
     };
 
@@ -126,7 +126,7 @@ const CustomerList: React.FC = () => {
                 className="btn btn-success"
                 onClick={() => handleShowModal()}
             >
-                Kunde hinzufügen
+                Kunde hinzuf&#252;gen
                 </button>
             </div>
             <ul className="list-group">
@@ -149,7 +149,7 @@ const CustomerList: React.FC = () => {
                                     className="btn btn-danger btn-sm me-2"
                                     onClick={() => deleteCustomer(customer.id)} 
                                 >
-                                    Löschen
+                                    L&#246;schen
                                 </button>
                                 {customer.projects.length > 0 && (
                                     <button
