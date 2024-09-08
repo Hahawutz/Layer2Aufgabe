@@ -2,15 +2,6 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Alert } from 'react-bootstrap';
 
-interface Customer {
-    id: number;
-    name: string;
-    code: string;
-    responsiblePerson: string;
-    startDate: string;
-    projects: any[];
-}
-
 interface Project {
     id?: number;
     name: string;
@@ -19,7 +10,6 @@ interface Project {
     endDate: string;
     responsiblePerson: string;
     customerId: number;
-    customer?: Customer;
 }
 
 interface ProjectFormModalProps {
@@ -42,14 +32,6 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
         endDate: '',
         responsiblePerson: '',
         customerId: 0,
-        customer: {
-            id: 0,
-            name: '',
-            code: '',
-            responsiblePerson: '',
-            startDate: '',
-            projects: [],
-        },
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -63,14 +45,6 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                 endDate: initialData.endDate ? initialData.endDate.split('T')[0] : '',
                 responsiblePerson: initialData.responsiblePerson || '',
                 customerId: initialData.customerId || 0,
-                customer: initialData.customer || {
-                    id: initialData.customerId || 0,
-                    name: '',
-                    code: '',
-                    responsiblePerson: '',
-                    startDate: initialData.startDate ? initialData.startDate.split('T')[0] : '',
-                    projects: [],
-                },
             });
         }
     }, [initialData, show]);
@@ -112,14 +86,6 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
             endDate: project.endDate || currentDate,
             responsiblePerson: project.responsiblePerson,
             customerId: project.customerId,
-            customer: {
-                id: Number(project.customerId),
-                name: '',
-                code: '',
-                responsiblePerson: '',
-                startDate: project.startDate || currentDate,
-                projects: [],
-            },
         };
 
         await onSubmit(formattedProject);

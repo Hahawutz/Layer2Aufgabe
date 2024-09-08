@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProjectFormModal from './ProjectFormModal';
 
-// Definieren der Typen für Projekte und Kunden
 interface Customer {
     id: number;
     name: string;
