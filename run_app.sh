@@ -1,33 +1,38 @@
 #!/bin/bash
 
-# Pfad zu deinem ASP.NET Core Web API
+
 API_DIR="./layer2Aufgabe.Server"
 
-# Pfad zu deiner React-App (Vite)
+
 REACT_DIR="./layer2aufgabe.client"
+
+# Installiere Abhängigkeiten für das ASP.NET Core Web API
+echo "Installiere Abhängigkeiten für ASP.NET Core Web API..."
+cd "$API_DIR"
+dotnet restore  
 
 # Start ASP.NET Core Web API
 echo "Starte ASP.NET Core Web API..."
-cd "$API_DIR"
-dotnet run &  # Startet ASP.NET Core im Hintergrund
-API_PID=$!    # Speichert die Prozess-ID von dotnet run
+dotnet run &  
+API_PID=$!    
 
-# Starte React App mit Vite
-echo "Starte React App mit Vite..."
+echo "Installiere Abhängigkeiten für React App..."
 cd "../$REACT_DIR"
-npm run dev &  # Startet Vite im Hintergrund
-REACT_PID=$!   # Speichert die Prozess-ID von npm run dev
+npm install  
 
-# Funktion zum Beenden der Prozesse
+
+echo "Starte React App mit Vite..."
+npm run dev & 
+REACT_PID=$!  
+
+
 function cleanup {
     echo "Beende ASP.NET Core Web API (PID: $API_PID)..."
-    kill -TERM -$API_PID  # Beendet den ASP.NET Core Prozess und seine Subprozesse
+    kill -TERM -$API_PID  
     echo "Beende React App (PID: $REACT_PID)..."
-    kill -TERM -$REACT_PID  # Beendet den Vite/React Prozess und seine Subprozesse
+    kill -TERM -$REACT_PID  
 }
 
-# Wenn das Skript ein Signal (z. B. SIGINT durch Strg+C) erhält, wird cleanup aufgerufen
 trap cleanup EXIT
 
-# Warte auf beide Prozesse
 wait
