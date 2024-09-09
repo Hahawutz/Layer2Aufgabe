@@ -158,6 +158,7 @@ const CustomerList: React.FC = () => {
                     <li key={customer.id} className="list-group-item d-flex flex-column">
                         <div className="d-flex justify-content-between align-items-center">
                             <div>
+                                <strong>Id: {customer.id}</strong><br />
                                 <strong>{customer.name}</strong> ({customer.code})<br />
                                 Verantwortlicher: {customer.responsiblePerson}<br />
                                 Kunde seit: {new Date(customer.startDate).toLocaleDateString()} 

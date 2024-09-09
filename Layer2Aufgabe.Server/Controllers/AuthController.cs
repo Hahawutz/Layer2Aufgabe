@@ -18,13 +18,6 @@ public class AuthController : ControllerBase
         _configuration = configuration;
     }
 
-    [HttpGet("test")]
-    public async Task<IActionResult> Test()
-    {
-        var users = _userManager.Users.ToList();
-        return Ok(users);
-    }
-
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] Login model)
     {
@@ -61,7 +54,7 @@ public class AuthController : ControllerBase
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddSeconds(30),
+            expires: DateTime.UtcNow.AddMinutes(30),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
