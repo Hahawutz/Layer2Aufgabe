@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,11 +21,35 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-    options.JsonSerializerOptions.WriteIndented = true; 
+    options.JsonSerializerOptions.WriteIndented = true;
 });
 
 if (builder.Environment.IsDevelopment())
@@ -40,9 +67,31 @@ if (builder.Environment.IsDevelopment())
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
-        options.OperationFilter<Layer2Aufgabe.Filters.AddCustomerExampleValuesOperationFilter>();
-    });
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+        });
 
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new string[] {}
+            }
+        });
+    });
 }
 
 var app = builder.Build();
@@ -58,10 +107,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowSpecificOrigins");
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
-if (app.Environment.IsDevelopment())
+await EnsureDatabaseCreatedAsync(app);
+
+app.Run();
+
+async Task EnsureDatabaseCreatedAsync(WebApplication app)
 {
     var dbPath = Path.Combine(AppContext.BaseDirectory, "app.db");
 
@@ -69,16 +125,18 @@ if (app.Environment.IsDevelopment())
     {
         var services = scope.ServiceProvider;
         var dbContext = services.GetRequiredService<AppDbContext>();
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
         try
         {
-         
             if (File.Exists(dbPath))
             {
                 File.Delete(dbPath);
             }
 
             dbContext.Database.Migrate();
+            await CreateUsersAndRolesAsync(userManager, roleManager);
         }
         catch (Exception ex)
         {
@@ -86,20 +144,61 @@ if (app.Environment.IsDevelopment())
         }
     }
 }
-else
+
+async Task CreateUsersAndRolesAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
 {
-    using (var scope = app.Services.CreateScope())
+    string[] roleNames = { "Admin", "Read", "Write" };
+    foreach (var roleName in roleNames)
     {
-        var services = scope.ServiceProvider;
-        var dbContext = services.GetRequiredService<AppDbContext>();
-        try
+        if (!await roleManager.RoleExistsAsync(roleName))
         {
-            dbContext.Database.Migrate();
+            await roleManager.CreateAsync(new IdentityRole(roleName));
         }
-        catch (Exception ex)
+    }
+
+    var bearerUser = await userManager.FindByNameAsync("Admin");
+    if (bearerUser == null)
+    {
+        bearerUser = new IdentityUser { UserName = "Admin", Email = "admin@example.com" };
+        var result = await userManager.CreateAsync(bearerUser, "Admin@123");
+
+        if (result.Succeeded)
         {
-            Console.WriteLine($"Fehler bei der Migration der Datenbank: {ex.Message}");
+            if (!await userManager.IsInRoleAsync(bearerUser, "Admin"))
+            {
+                await userManager.AddToRoleAsync(bearerUser, "Admin");
+            }
+        }
+    }
+
+    var readerUser = await userManager.FindByNameAsync("reader");
+    if (readerUser == null)
+    {
+        readerUser = new IdentityUser { UserName = "reader", Email = "reader@example.com" };
+        var result = await userManager.CreateAsync(readerUser, "Reader@123");
+
+        if (result.Succeeded)
+        {
+            if (!await userManager.IsInRoleAsync(readerUser, "Read"))
+            {
+                await userManager.AddToRoleAsync(readerUser, "Read");
+            }
+        }
+    }
+
+    var writerUser = await userManager.FindByNameAsync("Write");
+    if (writerUser == null)
+    {
+        writerUser = new IdentityUser { UserName = "Write", Email = "writer@example.com" };
+        var result = await userManager.CreateAsync(writerUser, "Write@123");
+
+        if (result.Succeeded)
+        {
+            if (!await userManager.IsInRoleAsync(writerUser, "Write") || !await userManager.IsInRoleAsync(writerUser, "Read"))
+            {
+                await userManager.AddToRoleAsync(writerUser, "Write");
+                await userManager.AddToRoleAsync(readerUser, "Read");
+            }
         }
     }
 }
-app.Run();

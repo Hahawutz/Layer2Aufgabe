@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,24 +16,25 @@ public class ProjectController : ControllerBase
         _context = context;
     }
 
-[HttpGet]
-public async Task<ActionResult<IEnumerable<Project>>> GetProject()
-{
-    var projects = await _context.Projects
-        .Include(p => p.Customer)
-        .ThenInclude(c => c.Projects)
-        .ToListAsync();
-
-    foreach (var project in projects)
+    [HttpGet]
+    [Authorize(Roles = "Write,Read,Admin")]
+    public async Task<ActionResult<IEnumerable<Project>>> GetProject()
     {
-        if (project.Customer != null)
-        {
-            project.Customer.Projects = project.Customer.Projects.Where(p => p.Id != project.Id).ToList();
-        }
-    }
+        var projects = await _context.Projects
+            .Include(p => p.Customer)
+            .ThenInclude(c => c.Projects)
+            .ToListAsync();
 
-    return Ok(projects);
-}
+        foreach (var project in projects)
+        {
+            if (project.Customer != null)
+            {
+                project.Customer.Projects = project.Customer.Projects.Where(p => p.Id != project.Id).ToList();
+            }
+        }
+
+        return Ok(projects);
+    }
 
     /// <remarks>
     /// Example Request:
@@ -43,6 +45,7 @@ public async Task<ActionResult<IEnumerable<Project>>> GetProject()
     ///
     /// </remarks>
     [HttpGet("{id}")]
+    [Authorize(Roles = "Write,Read,Admin")]
     public async Task<ActionResult<Project>> GetProject(int id)
     {
         var project = await _context.Projects.Include(p => p.Customer).FirstOrDefaultAsync(p => p.Id == id);
@@ -54,6 +57,7 @@ public async Task<ActionResult<IEnumerable<Project>>> GetProject()
     }
 
     [HttpPost]
+    [Authorize(Roles = "Write,Admin")]
     public async Task<IActionResult> CreateProject([FromBody] Project project)
     {
         var customer = await _context.Customers.FindAsync(project.CustomerId);
@@ -93,6 +97,7 @@ public async Task<ActionResult<IEnumerable<Project>>> GetProject()
     ///
     /// </remarks>
     [HttpPut("{id}")]
+    [Authorize(Roles = "Write,Admin")]
     public async Task<IActionResult> UpdateProject(int id, [FromBody] Project project)
     {
         if (id != project.Id)
@@ -137,6 +142,7 @@ public async Task<ActionResult<IEnumerable<Project>>> GetProject()
     ///
     /// </remarks>
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteProject(int id)
     {
         var project = await _context.Projects.FindAsync(id);

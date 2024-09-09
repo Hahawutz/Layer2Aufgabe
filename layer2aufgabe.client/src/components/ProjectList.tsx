@@ -20,15 +20,33 @@ interface Project {
     customer?: Customer;
 }
 
+const getRoleFromLocalStorage = () => {
+    return localStorage.getItem('role');
+};
+
+const getTokenFromLocalStorage = () => {
+    return localStorage.getItem('token');
+};
+
 const ProjectList: React.FC = () => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [expandedProjectId, setExpandedProjectId] = useState<number | null>(null);
 
+
+    const role = getRoleFromLocalStorage();
+    // JWT-Token abrufen
+    const token = getTokenFromLocalStorage();
+
     const fetchProjects = async () => {
         try {
-            const response = await fetch('https://localhost:7073/api/Project');
+            const response = await fetch('https://localhost:7073/api/Project', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
             if (!response.ok) {
                 throw new Error('Fehler beim Abrufen der Projektliste');
             }
@@ -49,12 +67,12 @@ const ProjectList: React.FC = () => {
         setShowModal(true);
     };
 
-    
     const addProject = async (newProject: Omit<Project, 'id'>) => {
         try {
             const response = await fetch('https://localhost:7073/api/Project', {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${token}`, 
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(newProject),
@@ -75,6 +93,7 @@ const ProjectList: React.FC = () => {
             const response = await fetch(`https://localhost:7073/api/Project/${updatedProject.id}`, {
                 method: 'PUT',
                 headers: {
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(updatedProject),
@@ -94,6 +113,9 @@ const ProjectList: React.FC = () => {
         try {
             const response = await fetch(`https://localhost:7073/api/Project/${projectId}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
             });
 
             if (!response.ok) {
@@ -123,12 +145,14 @@ const ProjectList: React.FC = () => {
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h2>Projektliste</h2>
-                <button
-                    className="btn btn-success"
-                    onClick={() => handleShowModal()}
-                >
-                    Projekt hinzuf&#252;gen
-                </button>
+                {role !== 'Read' && (
+                    <button
+                        className="btn btn-success"
+                        onClick={() => handleShowModal()}
+                    >
+                        Projekt hinzuf&#252;gen
+                    </button>
+                )}
             </div>
             <div className="row">
                 {projects.map((project) => (
@@ -144,18 +168,22 @@ const ProjectList: React.FC = () => {
                                 </p>
                                 <div className="d-flex justify-content-between">
                                     <div>
-                                        <button
-                                            className="btn btn-primary btn-sm me-2"
-                                            onClick={() => handleShowModal(project)}
-                                        >
-                                            Bearbeiten
-                                        </button>
-                                        <button
-                                            className="btn btn-danger btn-sm"
-                                            onClick={() => deleteProject(project.id)}
-                                        >
-                                            L&#246;schen
-                                        </button>
+                                        {role !== 'Read' && (
+                                            <button
+                                                className="btn btn-primary btn-sm me-2"
+                                                onClick={() => handleShowModal(project)}
+                                            >
+                                                Bearbeiten
+                                            </button>
+                                        )}
+                                        {role === 'Admin' && (
+                                            <button
+                                                className="btn btn-danger btn-sm"
+                                                onClick={() => deleteProject(project.id)}
+                                            >
+                                                L&#246;schen
+                                            </button>
+                                        )}
                                     </div>
                                     {project.customer && (
                                         <button

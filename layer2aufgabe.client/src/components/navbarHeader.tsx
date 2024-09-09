@@ -1,7 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const NavbarHeader: React.FC = () => {
+    const navigate = useNavigate();
+
+    const isLoggedIn = !!localStorage.getItem('token');
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+    };
+
+    if (!isLoggedIn) {
+        return null; 
+    }
+
     return (
         <nav className="navbar navbar-expand-lg" style={{ backgroundColor: '#e3f2fd' }}>
             <div className="container">
@@ -24,6 +37,11 @@ const NavbarHeader: React.FC = () => {
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link btn" to="/Projects">Projekt &#252;bersicht</Link>
+                        </li>
+                    </ul>
+                    <ul className="navbar-nav ms-auto">
+                        <li className="nav-item">
+                            <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
                         </li>
                     </ul>
                 </div>
