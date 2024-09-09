@@ -139,6 +139,7 @@ const CustomerList: React.FC = () => {
                                 Kunde seit: {new Date(customer.startDate).toLocaleDateString()} {}
                             </div>
                             <div>
+                                {role !== 'Read' && (
                                 <button
                                     className="btn btn-primary btn-sm me-2"
                                     onClick={() => handleShowModal(customer)}
