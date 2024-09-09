@@ -2,12 +2,22 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Alert } from 'react-bootstrap';
 
+interface Project {
+    id: number;
+    name: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+    responsiblePerson: string;
+}
+
 interface Customer {
-    id?: number;
+    id: number;
     name: string;
     code: string;
     responsiblePerson: string;
     startDate: string;
+    projects: Project[];
 }
 
 interface CustomerFormModalProps {
@@ -24,10 +34,12 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
     initialData = {},
 }) => {
     const [customer, setCustomer] = useState<Customer>({
+        id: 0,
         name: '',
         code: '',
         responsiblePerson: '',
-        startDate: ''
+        startDate: '',
+        projects: []
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -35,17 +47,21 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
     useEffect(() => {
         if (show && initialData?.id) {
             setCustomer({
+                id: initialData.id || 0,
                 name: initialData.name || '',
                 code: initialData.code || '',
                 responsiblePerson: initialData.responsiblePerson || '',
-                startDate: initialData.startDate || ''
+                startDate: initialData.startDate || '',
+                projects: initialData.projects || []
             });
         } else if (show && !initialData?.id) {
             setCustomer({
+                id: 0,
                 name: '',
                 code: '',
                 responsiblePerson: '',
-                startDate: ''
+                startDate: '',
+                projects: []
             });
         }
     }, [initialData, show]);
@@ -81,11 +97,12 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
         }
 
         const formattedCustomer: Customer = {
-            id: initialData.id || undefined,
+            id: customer.id,
             name: customer.name,
             code: customer.code,
             responsiblePerson: customer.responsiblePerson,
             startDate: getISO8601Format(customer.startDate),
+            projects: customer.projects,
         };
 
         await onSubmit(formattedCustomer);

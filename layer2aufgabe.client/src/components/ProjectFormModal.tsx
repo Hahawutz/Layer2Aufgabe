@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Alert } from 'react-bootstrap';
 
 interface Project {
-    id?: number;
+    id: number;
     name: string;
     description: string;
     startDate: string;
@@ -26,6 +26,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
     initialData = {},
 }) => {
     const [project, setProject] = useState<Project>({
+        id: 0,
         name: '',
         description: '',
         startDate: '',
@@ -39,6 +40,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
     useEffect(() => {
         if (show && initialData) {
             setProject({
+                id: initialData.id || 0,
                 name: initialData.name || '',
                 description: initialData.description || '',
                 startDate: initialData.startDate ? initialData.startDate.split('T')[0] : '',

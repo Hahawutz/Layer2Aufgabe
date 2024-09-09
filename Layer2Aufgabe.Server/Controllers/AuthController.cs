@@ -18,6 +18,13 @@ public class AuthController : ControllerBase
         _configuration = configuration;
     }
 
+    [HttpGet("test")]
+    public async Task<IActionResult> Test()
+    {
+        var users = _userManager.Users.ToList();
+        return Ok(users);
+    }
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] Login model)
     {
