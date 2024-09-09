@@ -20,15 +20,28 @@ interface Customer {
     projects: Project[];
 }
 
+const getRoleFromLocalStorage = () => {
+    return localStorage.getItem('role');
+};
 const CustomerList: React.FC = () => {
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
     const [expandedCustomerId, setExpandedCustomerId] = useState<number | null>(null);
 
+    const username = localStorage.getItem('username');
+
+    const getToken = () => localStorage.getItem('token');
+    const role = getRoleFromLocalStorage();
     const fetchCustomers = async () => {
         try {
-            const response = await fetch('https://localhost:7073/api/Customer');
+            const token = getToken();
+            const response = await fetch('https://localhost:7073/api/Customer', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
             if (!response.ok) {
                 throw new Error('Fehler beim Abrufen der Kundenliste');
             }
@@ -51,10 +64,12 @@ const CustomerList: React.FC = () => {
 
     const addCustomer = async (newCustomer: Omit<Customer, 'id'>) => {
         try {
+            const token = getToken();
             const response = await fetch('https://localhost:7073/api/Customer', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(newCustomer),
             });
@@ -71,10 +86,12 @@ const CustomerList: React.FC = () => {
 
     const updateCustomer = async (updatedCustomer: Customer) => {
         try {
+            const token = getToken();
             const response = await fetch(`https://localhost:7073/api/Customer/${updatedCustomer.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(updatedCustomer),
             });
@@ -91,8 +108,12 @@ const CustomerList: React.FC = () => {
 
     const deleteCustomer = async (customerId: number) => {
         try {
+            const token = getToken();
             const response = await fetch(`https://localhost:7073/api/Customer/${customerId}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
             });
 
             if (!response.ok) {
@@ -121,13 +142,16 @@ const CustomerList: React.FC = () => {
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
-            <h2>Kundenliste</h2>
-            <button
-                className="btn btn-success"
-                onClick={() => handleShowModal()}
-            >
-                Kunde hinzuf&#252;gen
-                </button>
+                <h2>Kundenliste</h2>
+                {username && <p>Eingeloggt als: {role}</p>}
+                {role !== 'Read' && (
+                    <button
+                        className="btn btn-success"
+                        onClick={() => handleShowModal()}
+                    >
+                        Kunde hinzuf&#252;gen
+                    </button>
+                )}
             </div>
             <ul className="list-group">
                 {customers.map((customer) => (
@@ -136,21 +160,25 @@ const CustomerList: React.FC = () => {
                             <div>
                                 <strong>{customer.name}</strong> ({customer.code})<br />
                                 Verantwortlicher: {customer.responsiblePerson}<br />
-                                Kunde seit: {new Date(customer.startDate).toLocaleDateString()} {}
+                                Kunde seit: {new Date(customer.startDate).toLocaleDateString()} 
                             </div>
                             <div>
-                                <button
-                                    className="btn btn-primary btn-sm me-2"
-                                    onClick={() => handleShowModal(customer)}
-                                >
-                                    Bearbeiten
-                                </button>
-                                <button
-                                    className="btn btn-danger btn-sm me-2"
-                                    onClick={() => deleteCustomer(customer.id)} 
-                                >
-                                    L&#246;schen
-                                </button>
+                                {role !== 'Read' && (
+                                    <button
+                                        className="btn btn-primary btn-sm me-2"
+                                        onClick={() => handleShowModal(customer)}
+                                    >
+                                        Bearbeiten
+                                    </button>
+                                )}
+                                {role === 'Admin' && (
+                                    <button
+                                        className="btn btn-danger btn-sm me-2"
+                                        onClick={() => deleteCustomer(customer.id)}
+                                    >
+                                        L&#246;schen
+                                    </button>
+                                )}
                                 {customer.projects.length > 0 && (
                                     <button
                                         className="btn btn-secondary btn-sm"
@@ -161,7 +189,6 @@ const CustomerList: React.FC = () => {
                                 )}
                             </div>
                         </div>
-
                         {expandedCustomerId === customer.id && customer.projects.length > 0 && (
                             <ul className="list-group mt-3">
                                 {customer.projects.map((project) => (
@@ -180,7 +207,6 @@ const CustomerList: React.FC = () => {
                 ))}
             </ul>
 
-            {}
             <CustomerFormModal
                 show={showModal}
                 handleClose={handleCloseModal}

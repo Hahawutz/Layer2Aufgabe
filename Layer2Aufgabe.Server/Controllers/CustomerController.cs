@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
+
 public class CustomerController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -13,6 +15,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Write,Read,Admin")]
     public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
     {
         return await _context.Customers.Include(c => c.Projects).ToListAsync();
@@ -27,6 +30,7 @@ public class CustomerController : ControllerBase
     ///
     /// </remarks>
     [HttpGet("{id}")]
+    [Authorize(Roles = "Write,Read,Admin")]
     public async Task<ActionResult<Customer>> GetCustomer(int id)
     {
         var customer = await _context.Customers
@@ -42,6 +46,7 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Write,Admin")]
     public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
     {
         _context.Customers.Add(customer);
@@ -63,6 +68,7 @@ public class CustomerController : ControllerBase
     ///
     /// </remarks>
     [HttpPut("{id}")]
+    [Authorize(Roles = "Write,Admin")]
     public async Task<IActionResult> PutCustomer(int id, [FromBody] Customer customer)
     {
         if (id != customer.Id)
@@ -103,6 +109,7 @@ public class CustomerController : ControllerBase
     }
  
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteCustomer(int id)
     {
         var customer = await _context.Customers.FindAsync(id);

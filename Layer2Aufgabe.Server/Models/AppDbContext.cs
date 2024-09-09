@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<IdentityUser>
 {
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Project> Projects { get; set; }
@@ -17,12 +19,11 @@ public class AppDbContext : DbContext
             .HasOne(p => p.Customer)
             .WithMany(c => c.Projects)
             .HasForeignKey(p => p.CustomerId)
-            .IsRequired(false)
+            .IsRequired(true)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Customer>()
-        .Property(c => c.Id)
-        .ValueGeneratedOnAdd();
-
+            .Property(c => c.Id)
+            .ValueGeneratedOnAdd();
     }
 }
