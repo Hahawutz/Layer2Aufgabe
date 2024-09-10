@@ -18,7 +18,9 @@ builder.Services.AddCors(options =>
         policyBuilder.WithOrigins("https://localhost:5173")
                .AllowAnyMethod()
                .AllowAnyHeader();
+        
     });
+    
 });
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
@@ -64,7 +66,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-
+        options.OperationFilter<Layer2Aufgabe.Filters.AddCustomerExampleValuesOperationFilter>();
         options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
             Name = "Authorization",
@@ -166,11 +168,11 @@ async Task CreateUsersAndRolesAsync(UserManager<IdentityUser> userManager, RoleM
         }
     }
 
-    var readerUser = await userManager.FindByNameAsync("reader");
+    var readerUser = await userManager.FindByNameAsync("Read");
     if (readerUser == null)
     {
-        readerUser = new IdentityUser { UserName = "reader", Email = "reader@example.com" };
-        var result = await userManager.CreateAsync(readerUser, "Reader@123");
+        readerUser = new IdentityUser { UserName = "Read", Email = "read@example.com" };
+        var result = await userManager.CreateAsync(readerUser, "Read@123");
 
         if (result.Succeeded)
         {
@@ -184,7 +186,7 @@ async Task CreateUsersAndRolesAsync(UserManager<IdentityUser> userManager, RoleM
     var writerUser = await userManager.FindByNameAsync("Write");
     if (writerUser == null)
     {
-        writerUser = new IdentityUser { UserName = "Write", Email = "writer@example.com" };
+        writerUser = new IdentityUser { UserName = "Write", Email = "write@example.com" };
         var result = await userManager.CreateAsync(writerUser, "Write@123");
 
         if (result.Succeeded)
