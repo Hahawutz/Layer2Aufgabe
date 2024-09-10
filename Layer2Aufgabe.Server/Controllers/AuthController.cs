@@ -25,7 +25,6 @@ public class AuthController : ControllerBase
         if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
         {
             var token = GenerateJwtToken(user);
-            Console.WriteLine(token);
             return Ok(new { token });
         }
 

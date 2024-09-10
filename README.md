@@ -1,4 +1,3 @@
-
 # Programmier Aufgabe
 
 Hallo zusammen,
@@ -15,45 +14,19 @@ Das **Frontend** habe ich mit **React** und **TypeScript** entwickelt.
 
 # Anleitung zum Starten des Projekts
 
-1. **Projekt klonen**  
+**Projekt klonen**  
    Zuerst das Projekt von dem Repository klonen.
 
-2. **Projekt mit `run_app.sh` starten**  
-   Nach dem Klonen kann das Projekt durch Ausführen des Skripts `run_app.sh` gestartet werden.  
-   > Hinweis: Beim ersten Start kann es etwas länger dauern, da möglicherweise Abhängigkeiten installiert werden müssen. Wenn es überhaupt nicht lädt dann bitte schließen und nochmal Ausführen.
-
-3. **Alternativ über das Terminal starten**
-
-   **Backend starten:**
-   - Navigiere im Terminal zum Backend-Verzeichnis:
-     ```bash
-     cd ./Layer2Aufgabe/Layer2Aufgabe.Server
+- Führen Sie dann die Layer2Aufgabe.Server.exe im Verzeichnis ./publish aus um das Backend und Frontend zu starten:
      ```
-   - Starte das Backend:
-     ```bash
-     dotnet run
-     ```
-   > Falls Abhängigkeiten fehlen, installiere diese vor dem Start.
-
-   **Frontend starten:**
-   - Navigiere im Terminal zum Frontend-Verzeichnis:
-     ```bash
-     cd ./Layer2Aufgabe/Layer2Aufgabe.Client
-     ```
-   - Starte das Frontend:
-     ```bash
-     npm run dev
-     ```
-   > Falls Abhängigkeiten fehlen, installiere sie mit:
-     ```bash
-     npm install
+     ./publish/Layer2Aufgabe.Server.exe
      ```
 
-Der Backend-Server läuft dann auf `https://localhost:7073/` und das Frontend auf `https://localhost:5173/`.
+Der Server läuft dann auf `https://localhost:7073/`.
 
-Um das Frontend aufzurufen, reicht es, die Seite `https://localhost:5173/` zu öffnen. Wenn ihr euch die **API-Dokumentation** anschauen möchtet, könnt ihr `https://localhost:7073/swagger/index.html` öffnen.
+Um das Frontend aufzurufen, reicht es, die Seite `https://localhost:7073/` zu öffnen. Wenn Sie die **API-Dokumentation** anschauen möchtet, können Sie diese unter `https://localhost:7073/swagger/index.html` öffnen.
 
-Im Frontend gelangt ihr dann auf eine **Login Page**. Ich habe eine Benutzerverwaltung mit **Read**, **Write** und **Admin** Rechten implementiert. Diese drei Benutzer werden beim Programmstart automatisch erstellt. Mir ist bewusst, dass dies keine gängige Methode ist und ich dies in einem Produktionssystem nicht machen würde, aber hier dient es nur dem Test.
+Im Frontend gelangen Sie dann auf eine **Login Page**. Ich habe eine Benutzerverwaltung mit **Read**, **Write** und **Admin** Rechten implementiert. Diese drei Benutzer werden beim Programmstart automatisch erstellt. Mir ist bewusst, dass dies keine gängige Methode ist und ich dies in einem Produktionssystem nicht machen würde, aber hier dient es nur dem Test.
 
 ### Einlog-Daten:
 
@@ -69,5 +42,5 @@ Im Frontend gelangt ihr dann auf eine **Login Page**. Ich habe eine Benutzerverw
 - Benutzername: `Write`
 - Passwort: `Write@123`
 
-Um die **API** zu testen, muss man sich ebenfalls zuerst einloggen und einen Token erstellen. Nutze dazu die `POST /api/Auth/login` und gib einfach einen der oben genannten Benutzer im **Request Body** ein. Dann den Token aus der Response kopieren auf **Authorize** Button klicken und dann im Value Feld eingeben.
+Um die **API** zu testen, muss man sich ebenfalls zuerst einloggen und einen Token erstellen. Nutze dazu die `POST /api/Auth/login` und geben Sie einfach einen der oben genannten Benutzer im **Request Body** ein. Dann können Sie den Token aus der Response kopieren auf den **Authorize** Button klicken und im Value Feld eingeben.
 
