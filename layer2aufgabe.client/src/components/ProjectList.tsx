@@ -48,12 +48,12 @@ const ProjectList: React.FC = () => {
                 },
             });
             if (!response.ok) {
-                throw new Error('Fehler beim Abrufen der Projektliste');
+                throw new Error('Error when retrieving the project list');
             }
             const data: Project[] = await response.json();
             setProjects(data);
         } catch (error) {
-            console.error('Fehler beim Laden der Projekte:', error);
+            console.error('Error when retrieving the project list:', error);
         }
     };
 
@@ -79,12 +79,12 @@ const ProjectList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Fehler beim Hinzuf&#252;gen des Projekts: ${response.statusText}`);
+                throw new Error(`Error when adding the project: ${response.statusText}`);
             }
 
             await fetchProjects();
         } catch (error) {
-            console.error('Fehler beim Hinzuf&#252;gen des Projekts:', error);
+            console.error('Error when adding the project:', error);
         }
     };
 
@@ -100,12 +100,12 @@ const ProjectList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Fehler beim Aktualisieren des Projekts: ${response.statusText}`);
+                throw new Error(`Error when updating the project: ${response.statusText}`);
             }
 
             await fetchProjects();
         } catch (error) {
-            console.error('Fehler beim Aktualisieren des Projekts:', error);
+            console.error('Error when updating the project:', error);
         }
     };
 
@@ -119,12 +119,12 @@ const ProjectList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Fehler beim L&#246;schen des Projekts: ${response.statusText}`);
+                throw new Error(`Error when deleting the project: ${response.statusText}`);
             }
 
             await fetchProjects();
         } catch (error) {
-            console.error('Fehler beim L&#246;schen des Projekts:', error);
+            console.error('Error when deleting the project:', error);
         }
     };
 
@@ -144,13 +144,14 @@ const ProjectList: React.FC = () => {
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h2>Projektliste</h2>
+                <h2>Project list</h2>
+                <p> Logged in as: {role}</p>
                 {role !== 'Read' && (
                     <button
                         className="btn btn-success"
                         onClick={() => handleShowModal()}
                     >
-                        Projekt hinzuf&#252;gen
+                        Add Project 
                     </button>
                 )}
             </div>
@@ -161,10 +162,10 @@ const ProjectList: React.FC = () => {
                             <div className="card-body">
                                 <h5 className="card-title">{project.name}</h5>
                                 <p className="card-text">
-                                    <strong>Beschreibung:</strong> {project.description}<br />
+                                    <strong>Description:</strong> {project.description}<br />
                                     <strong>Start:</strong> {new Date(project.startDate).toLocaleDateString()}<br />
-                                    <strong>Ende:</strong> {new Date(project.endDate).toLocaleDateString()}<br />
-                                    <strong>Verantwortlich:</strong> {project.responsiblePerson}
+                                    <strong>End:</strong> {new Date(project.endDate).toLocaleDateString()}<br />
+                                    <strong>Responsible:</strong> {project.responsiblePerson}
                                 </p>
                                 <div className="d-flex justify-content-between">
                                     <div>
@@ -173,7 +174,7 @@ const ProjectList: React.FC = () => {
                                                 className="btn btn-primary btn-sm me-2"
                                                 onClick={() => handleShowModal(project)}
                                             >
-                                                Bearbeiten
+                                                Edit
                                             </button>
                                         )}
                                         {role === 'Admin' && (
@@ -181,7 +182,7 @@ const ProjectList: React.FC = () => {
                                                 className="btn btn-danger btn-sm"
                                                 onClick={() => deleteProject(project.id)}
                                             >
-                                                L&#246;schen
+                                                Delete
                                             </button>
                                         )}
                                     </div>
@@ -190,7 +191,7 @@ const ProjectList: React.FC = () => {
                                             className="btn btn-secondary btn-sm"
                                             onClick={() => toggleCustomerDetails(project.id)}
                                         >
-                                            {expandedProjectId === project.id ? 'Kunde verbergen' : 'Kunde anzeigen'}
+                                            {expandedProjectId === project.id ? 'Hide customer' : 'Show customer'}
                                         </button>
                                     )}
                                 </div>
@@ -200,7 +201,7 @@ const ProjectList: React.FC = () => {
                                         <table className="table table-sm table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Kunde</th>
+                                                    <th>Customer</th>
                                                     <th>Details</th>
                                                 </tr>
                                             </thead>
@@ -210,15 +211,15 @@ const ProjectList: React.FC = () => {
                                                     <td>{project.customer.name}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>K&#252;rzel:</strong></td>
+                                                    <td><strong>Code:</strong></td>
                                                     <td>{project.customer.code}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Verantwortlicher:</strong></td>
+                                                    <td><strong>Responsible:</strong></td>
                                                     <td>{project.customer.responsiblePerson}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td><strong>Kunde seit:</strong></td>
+                                                    <td><strong>Customer since:</strong></td>
                                                     <td>{new Date(project.customer.startDate).toLocaleDateString()}</td>
                                                 </tr>
                                             </tbody>

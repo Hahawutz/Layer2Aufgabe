@@ -59,12 +59,12 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
 
-        if (!project.name) newErrors.name = 'Projektname ist erforderlich.';
-        if (!project.description) newErrors.description = 'Projektbeschreibung ist erforderlich.';
-        if (!project.startDate) newErrors.startDate = 'Startdatum ist erforderlich.';
-        if (!project.endDate) newErrors.endDate = 'Enddatum ist erforderlich.';
-        if (!project.responsiblePerson) newErrors.responsiblePerson = 'Verantwortliche Person ist erforderlich.';
-        if (!project.customerId) newErrors.customerId = 'Kunden-ID ist erforderlich.';
+        if (!project.name) newErrors.name = ' Project name is required.';
+        if (!project.description) newErrors.description = 'Project description is required.';
+        if (!project.startDate) newErrors.startDate = ' Start date is required.';
+        if (!project.endDate) newErrors.endDate = ' End date is required.';
+        if (!project.responsiblePerson) newErrors.responsiblePerson = ' Responsible person is required.';
+        if (!project.customerId) newErrors.customerId = ' Customer ID is required.';
 
         return newErrors;
     };
@@ -97,18 +97,18 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>{initialData.id ? 'Projekt bearbeiten' : 'Projekt hinzuf&#252;gen'}</Modal.Title>
+                <Modal.Title>{initialData.id ? 'Edit project' : 'Add project'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form onSubmit={handleSubmit}>
                     {Object.keys(errors).length > 0 && (
                         <Alert variant="danger">
-                            Bitte f&#252;llen Sie alle Felder aus.
+                            Please fill in all fields.
                         </Alert>
                     )}
 
                     <div className="mb-3">
-                        <label htmlFor="name" className="form-label">Projektname:</label>
+                        <label htmlFor="name" className="form-label">Project name:</label>
                         <input
                             id="name"
                             name="name"
@@ -120,7 +120,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="description" className="form-label">Projektbeschreibung:</label>
+                        <label htmlFor="description" className="form-label">Project description:</label>
                         <textarea
                             id="description"
                             name="description"
@@ -132,7 +132,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="startDate" className="form-label">Startdatum:</label>
+                        <label htmlFor="startDate" className="form-label">Start date:</label>
                         <input
                             type="date"
                             id="startDate"
@@ -145,7 +145,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="endDate" className="form-label">Enddatum:</label>
+                        <label htmlFor="endDate" className="form-label">End date:</label>
                         <input
                             type="date"
                             id="endDate"
@@ -158,7 +158,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="responsiblePerson" className="form-label">Verantwortliche Person:</label>
+                        <label htmlFor="responsiblePerson" className="form-label">Responsible person:</label>
                         <input
                             id="responsiblePerson"
                             name="responsiblePerson"
@@ -170,7 +170,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="customerId" className="form-label">Kunden-ID:</label>
+                        <label htmlFor="customerId" className="form-label">Customer ID:</label>
                         <input
                             id="customerId"
                             name="customerId"
@@ -182,7 +182,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                     </div>
 
                     <Button variant="primary" type="submit">
-                        {initialData.id ? 'Speichern' : 'Hinzuf&#252;gen'}
+                        {initialData.id ? 'Safe' : 'Add'}
                     </Button>
                 </form>
             </Modal.Body>
