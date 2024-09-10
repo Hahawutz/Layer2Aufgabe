@@ -40,8 +40,8 @@ const Login: React.FC = () => {
                 alert('Login failed');
             }
         } catch (error) {
-            console.error('Fehler beim Login:', error);
-            alert('Fehler beim Login: ' + error);
+            console.error('Login failed:', error);
+            alert('Login failed: ' + error);
         }
     };
 
@@ -59,6 +59,7 @@ const Login: React.FC = () => {
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             placeholder="Enter username"
+                            onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
                         />
                     </div>
                     <div className="form-group mt-3">
@@ -70,6 +71,7 @@ const Login: React.FC = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter password"
+                            onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
                         />
                     </div>
                     <button onClick={handleLogin} className="btn btn-primary mt-4 w-100">

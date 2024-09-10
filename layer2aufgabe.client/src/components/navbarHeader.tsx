@@ -33,10 +33,10 @@ const NavbarHeader: React.FC = () => {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav me-auto">
                         <li className="nav-item">
-                            <Link className="nav-link btn" to="/Customers">Kunden &#252;bersicht</Link>
+                            <Link className="nav-link btn" to="/Customers">Customer overview</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link btn" to="/Projects">Projekt &#252;bersicht</Link>
+                            <Link className="nav-link btn" to="/Projects">Project overview</Link>
                         </li>
                     </ul>
                     <ul className="navbar-nav ms-auto">

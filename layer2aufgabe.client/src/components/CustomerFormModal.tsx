@@ -74,10 +74,10 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
 
-        if (!customer.name) newErrors.name = 'Kundenname ist erforderlich.';
-        if (!customer.code) newErrors.code = 'Kundenk&#252;rzel ist erforderlich.';
-        if (!customer.responsiblePerson) newErrors.responsiblePerson = 'Kundenverantwortlicher ist erforderlich.';
-        if (!customer.startDate) newErrors.startDate = 'Startdatum ist erforderlich.';
+        if (!customer.name) newErrors.name = 'Customer name is required';
+        if (!customer.code) newErrors.code = 'Customer code is required';
+        if (!customer.responsiblePerson) newErrors.responsiblePerson = 'Customer responsible person is required';
+        if (!customer.startDate) newErrors.startDate = 'Start date is required';
 
         return newErrors;
     };
@@ -112,18 +112,18 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>{initialData?.id ? 'Kunden bearbeiten' : 'Kunden hinzuf&#252;gen'}</Modal.Title>
+                <Modal.Title>{initialData?.id ? 'Edit customer' : 'Add customer'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form onSubmit={handleSubmit}>
                     {Object.keys(errors).length > 0 && (
                         <Alert variant="danger">
-                            Bitte f&#252;llen Sie alle Felder aus.
+                            Please fill in all fields.
                         </Alert>
                     )}
 
                     <div className="mb-3">
-                        <label htmlFor="name" className="form-label">Kundenname:</label>
+                        <label htmlFor="name" className="form-label">Customer name:</label>
                         <input
                             id="name"
                             name="name"
@@ -135,7 +135,7 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="code" className="form-label">Kundenk&#252;rzel:</label>
+                        <label htmlFor="code" className="form-label">Code:</label>
                         <input
                             id="code"
                             name="code"
@@ -147,7 +147,7 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="responsiblePerson" className="form-label">Kundenverantwortlicher:</label>
+                        <label htmlFor="responsiblePerson" className="form-label">Responsible person:</label>
                         <input
                             id="responsiblePerson"
                             name="responsiblePerson"
@@ -159,12 +159,12 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="startDate" className="form-label">Kunde seit:</label>
+                        <label htmlFor="startDate" className="form-label">Customer since:</label>
                         <input
                             type="date"
                             id="startDate"
                             name="startDate"
-                            value={customer.startDate.split('T')[0]} // Nur das Datum anzeigen
+                            value={customer.startDate.split('T')[0]}
                             onChange={handleChange}
                             className={`form-control ${errors.startDate ? 'is-invalid' : ''}`}
                         />
@@ -172,7 +172,7 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                     </div>
 
                     <Button variant="primary" type="submit">
-                        {initialData?.id ? 'Speichern' : 'Hinzuf&#252;gen'}
+                        {initialData?.id ? 'Save' : 'Add'}
                     </Button>
                 </form>
             </Modal.Body>

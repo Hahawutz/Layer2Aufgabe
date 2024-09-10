@@ -43,12 +43,12 @@ const CustomerList: React.FC = () => {
                 },
             });
             if (!response.ok) {
-                throw new Error('Fehler beim Abrufen der Kundenliste');
+                throw new Error('Error when retrieving the customer list');
             }
             const data: Customer[] = await response.json();
             setCustomers(data);
         } catch (error) {
-            console.error('Fehler beim Laden der Kunden:', error);
+            console.error('Error when retrieving the customer list:', error);
         }
     };
 
@@ -75,12 +75,12 @@ const CustomerList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Fehler beim Hinzuf&#252;gen des Kunden: ${response.statusText}`);
+                throw new Error(`Error when adding the customer: ${response.statusText}`);
             }
 
             await fetchCustomers();
         } catch (error) {
-            console.error('Fehler beim Hinzuf&#252;gen des Kunden:', error);
+            console.error('Error when adding the customer:', error);
         }
     };
 
@@ -97,12 +97,12 @@ const CustomerList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Fehler beim Aktualisieren des Kunden: ${response.statusText}`);
+                throw new Error(`Error when updating the customer: ${response.statusText}`);
             }
 
             await fetchCustomers();
         } catch (error) {
-            console.error('Fehler beim Aktualisieren des Kunden:', error);
+            console.error('Error when updating the customer:', error);
         }
     };
 
@@ -117,12 +117,12 @@ const CustomerList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Fehler beim L&#246;schen des Kunden: ${response.statusText}`);
+                throw new Error(`Error when deleting the customer: ${response.statusText}`);
             }
 
             await fetchCustomers();
         } catch (error) {
-            console.error('Fehler beim L&#246;schen des Kunden:', error);
+            console.error('Error when deleting the customer:', error);
         }
     };
 
@@ -142,14 +142,14 @@ const CustomerList: React.FC = () => {
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h2>Kundenliste</h2>
-                {username && <p>Eingeloggt als: {role}</p>}
+                <h2>Customer list</h2>
+                {username && <p>Logged in as: {role}</p>}
                 {role !== 'Read' && (
                     <button
                         className="btn btn-success"
                         onClick={() => handleShowModal()}
                     >
-                        Kunde hinzuf&#252;gen
+                        Add customer
                     </button>
                 )}
             </div>
@@ -160,8 +160,8 @@ const CustomerList: React.FC = () => {
                             <div>
                                 <strong>Id: {customer.id}</strong><br />
                                 <strong>{customer.name}</strong> ({customer.code})<br />
-                                Verantwortlicher: {customer.responsiblePerson}<br />
-                                Kunde seit: {new Date(customer.startDate).toLocaleDateString()} 
+                                Responsible: {customer.responsiblePerson}<br />
+                                Customer since: {new Date(customer.startDate).toLocaleDateString()} 
                             </div>
                             <div>
                                 {role !== 'Read' && (
@@ -169,7 +169,7 @@ const CustomerList: React.FC = () => {
                                         className="btn btn-primary btn-sm me-2"
                                         onClick={() => handleShowModal(customer)}
                                     >
-                                        Bearbeiten
+                                        Edit
                                     </button>
                                 )}
                                 {role === 'Admin' && (
@@ -177,7 +177,7 @@ const CustomerList: React.FC = () => {
                                         className="btn btn-danger btn-sm me-2"
                                         onClick={() => deleteCustomer(customer.id)}
                                     >
-                                        L&#246;schen
+                                        Delete
                                     </button>
                                 )}
                                 {customer.projects.length > 0 && (
@@ -185,7 +185,7 @@ const CustomerList: React.FC = () => {
                                         className="btn btn-secondary btn-sm"
                                         onClick={() => toggleProjects(customer.id)}
                                     >
-                                        {expandedCustomerId === customer.id ? 'Projekte verbergen' : 'Projekte anzeigen'}
+                                        {expandedCustomerId === customer.id ? 'Hide project' : 'Show project'}
                                     </button>
                                 )}
                             </div>
@@ -197,9 +197,9 @@ const CustomerList: React.FC = () => {
                                         <strong>{project.name}</strong>: {project.description}
                                         <br />
                                         Start: {new Date(project.startDate).toLocaleDateString()} -
-                                        Ende: {new Date(project.endDate).toLocaleDateString()}
+                                        End: {new Date(project.endDate).toLocaleDateString()}
                                         <br />
-                                        Verantwortlich: {project.responsiblePerson}
+                                        Responsible: {project.responsiblePerson}
                                     </li>
                                 ))}
                             </ul>
