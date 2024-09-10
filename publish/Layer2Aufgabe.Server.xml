@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Layer2Aufgabe.Server</name>
+    </assembly>
+    <members>
+        <member name="M:CustomerController.GetCustomer(System.Int32)">
+             <remarks>
+             Example Request:
+            
+                 {
+                    "id": number
+                 }
+            
+             </remarks>
+        </member>
+        <member name="M:CustomerController.PutCustomer(System.Int32,Customer)">
+             <remarks>
+             Example Request:
+            
+                 {
+                    "id": number,
+                    "name": "string",
+                    "code": "string",
+                    "responsiblePerson": "string",
+                    "startDate": "2024-09-08T16:57:17.228Z"
+                 }
+            
+             </remarks>
+        </member>
+        <member name="M:ProjectController.GetProject(System.Int32)">
+             <remarks>
+             Example Request:
+            
+                 {
+                    "id": number
+                 }
+            
+             </remarks>
+        </member>
+        <member name="M:ProjectController.UpdateProject(System.Int32,Project)">
+             <remarks>
+             Example Request:
+            
+                 {
+                    "id": number,
+                    "description": "Description",
+                    "startDate": "2024-09-08",
+                    "endDate": "2024-09-08",
+                    "responsiblePerson": "Mustermann Max",
+                     "customerId": 0
+                 }
+            
+             </remarks>
+        </member>
+        <member name="M:ProjectController.DeleteProject(System.Int32)">
+             <remarks>
+             Example Request:
+            
+                 {
+                    "id": number
+                 }
+            
+             </remarks>
+        </member>
+        <member name="T:Layer2Aufgabe.Server.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:Layer2Aufgabe.Server.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Layer2Aufgabe.Server.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Layer2Aufgabe.Server.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="P:Customer.Projects">
+            <example>"[]"</example>
+        </member>
+    </members>
+</doc>

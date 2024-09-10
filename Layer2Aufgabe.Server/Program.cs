@@ -104,6 +104,9 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseCors(builder =>
         builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapFallbackToFile("/index.html");
 
 app.UseAuthentication();
 app.UseAuthorization();
