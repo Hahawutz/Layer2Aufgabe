@@ -16,9 +16,9 @@ Das **Frontend** habe ich mit **React** und **TypeScript** entwickelt.
 
 **Projekt anschauen**  
 
-Ich habe das Projekt auf Azure geladen und man es dort Testen.
+Ich habe das Projekt auf Azure geladen und man es dort Testen.  
 Frontend: http://layer2aufgabeserver20240911164841.azurewebsites.net  
-Backend-API: http://layer2aufgabeserver20240911164841.azurewebsites.net/swagger/index.html
+Backend-API: http://layer2aufgabeserver20240911164841.azurewebsites.net/swagger/index.html  
 
 **Projekt klonen**  
    Zuerst das Projekt von dem Repository klonen.
@@ -52,19 +52,19 @@ Um die **API** zu testen, muss man sich ebenfalls zuerst einloggen und einen Tok
 
 
 ### Quellen:
-https://learn.microsoft.com/en-us/aspnet/entity-framework
-https://www.w3schools.com/react/default.asp
-https://www.oreilly.com/library/view/c-in-a/0596001819/ch04s10.html
-https://jwt.io/
-https://swagger.io/specification/
-https://www.telerik.com/blogs/asp-net-core-basics-authentication-authorization-jwt
-https://chatgpt.com/
-https://codewithmukesh.com/blog/aspnet-core-api-with-jwt-authentication/
-https://www.youtube.com/
-https://stackoverflow.com/
-https://learn.microsoft.com/en-us/aspnet/core/?view=aspnetcore-8.0
-https://gemini.google.com/app?hl=en
-https://learn.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-8.0
-https://learn.microsoft.com/en-us/ef/core/
-https://identityserver4.readthedocs.io/en/latest/
+https://learn.microsoft.com/en-us/aspnet/entity-framework,
+https://www.w3schools.com/react/default.asp,
+https://www.oreilly.com/library/view/c-in-a/0596001819/ch04s10.html,
+https://jwt.io/,
+https://swagger.io/specification/,
+https://www.telerik.com/blogs/asp-net-core-basics-authentication-authorization-jwt,
+https://chatgpt.com/,
+https://codewithmukesh.com/blog/aspnet-core-api-with-jwt-authentication/,
+https://www.youtube.com/,
+https://stackoverflow.com/,
+https://learn.microsoft.com/en-us/aspnet/core/?view=aspnetcore-8.0,
+https://gemini.google.com/app?hl=en,
+https://learn.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-8.0,
+https://learn.microsoft.com/en-us/ef/core/,
+https://identityserver4.readthedocs.io/en/latest/,
 https://www.typescriptlang.org/docs/handbook/intro.html
