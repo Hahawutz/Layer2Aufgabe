@@ -16,7 +16,9 @@ Das **Frontend** habe ich mit **React** und **TypeScript** entwickelt.
 
 **Projekt anschauen**  
 
-Ich habe das Projekt auf Azure geladen und man es dort Testen: http://layer2aufgabeserver20240911164841.azurewebsites.net
+Ich habe das Projekt auf Azure geladen und man es dort Testen.
+Frontend: http://layer2aufgabeserver20240911164841.azurewebsites.net 
+Backend-API: http://layer2aufgabeserver20240911164841.azurewebsites.net/swagger/index.html
 
 **Projekt klonen**  
    Zuerst das Projekt von dem Repository klonen.
