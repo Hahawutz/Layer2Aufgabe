@@ -43,7 +43,7 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/': {
+            '^/Customers': {
                 target,
                 secure: false
             }

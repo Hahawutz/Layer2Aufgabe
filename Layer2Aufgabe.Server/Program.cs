@@ -117,6 +117,9 @@ await EnsureDatabaseCreatedAsync(app);
 
 app.Run();
 
+/// <summary>
+/// Creates the databases at startup or, if present, they are deleted and recreated.
+/// </summary>
 async Task EnsureDatabaseCreatedAsync(WebApplication app)
 {
     var dbPath = Path.Combine(AppContext.BaseDirectory, "app.db");
@@ -144,7 +147,9 @@ async Task EnsureDatabaseCreatedAsync(WebApplication app)
         }
     }
 }
-
+/// <summary>
+/// Create three users for test purposes when loading program.
+/// </summary>
 async Task CreateUsersAndRolesAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
 {
     string[] roleNames = { "Admin", "Read", "Write" };

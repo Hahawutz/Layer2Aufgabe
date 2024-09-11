@@ -20,9 +20,11 @@ interface Customer {
     projects: Project[];
 }
 
+// Fetch the user's role from localStorage
 const getRoleFromLocalStorage = () => {
     return localStorage.getItem('role');
 };
+
 const CustomerList: React.FC = () => {
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [showModal, setShowModal] = useState(false);
@@ -30,9 +32,12 @@ const CustomerList: React.FC = () => {
     const [expandedCustomerId, setExpandedCustomerId] = useState<number | null>(null);
 
     const username = localStorage.getItem('username');
-
-    const getToken = () => localStorage.getItem('token');
     const role = getRoleFromLocalStorage();
+
+    // Retrieve the JWT token from localStorage
+    const getToken = () => localStorage.getItem('token');
+
+    // Fetch customers
     const fetchCustomers = async () => {
         try {
             const token = getToken();
@@ -46,22 +51,27 @@ const CustomerList: React.FC = () => {
                 throw new Error('Error when retrieving the customer list');
             }
             const data: Customer[] = await response.json();
-            setCustomers(data);
+            setCustomers(data); // Update the state with fetched customers
         } catch (error) {
             console.error('Error when retrieving the customer list:', error);
         }
     };
 
+    // Fetch customers when component mounts
     useEffect(() => {
         fetchCustomers();
     }, []);
 
+    // Close the modal
     const handleCloseModal = () => setShowModal(false);
+
+    // Show the modal for adding/editing a customer
     const handleShowModal = (customer: Customer | null = null) => {
         setSelectedCustomer(customer);
         setShowModal(true);
     };
 
+    // Add a new customer
     const addCustomer = async (newCustomer: Omit<Customer, 'id'>) => {
         try {
             const token = getToken();
@@ -78,12 +88,13 @@ const CustomerList: React.FC = () => {
                 throw new Error(`Error when adding the customer: ${response.statusText}`);
             }
 
-            await fetchCustomers();
+            await fetchCustomers(); // Refresh the customer list
         } catch (error) {
             console.error('Error when adding the customer:', error);
         }
     };
 
+    // Update an existing customer
     const updateCustomer = async (updatedCustomer: Customer) => {
         try {
             const token = getToken();
@@ -100,12 +111,13 @@ const CustomerList: React.FC = () => {
                 throw new Error(`Error when updating the customer: ${response.statusText}`);
             }
 
-            await fetchCustomers();
+            await fetchCustomers(); // Refresh the customer list
         } catch (error) {
             console.error('Error when updating the customer:', error);
         }
     };
 
+    // Delete a customer
     const deleteCustomer = async (customerId: number) => {
         try {
             const token = getToken();
@@ -120,12 +132,13 @@ const CustomerList: React.FC = () => {
                 throw new Error(`Error when deleting the customer: ${response.statusText}`);
             }
 
-            await fetchCustomers();
+            await fetchCustomers(); // Refresh the customer list
         } catch (error) {
             console.error('Error when deleting the customer:', error);
         }
     };
 
+    // Handle form submission (either add or update)
     const handleSubmit = async (customer: Customer) => {
         if (customer.id) {
             await updateCustomer(customer);
@@ -135,6 +148,7 @@ const CustomerList: React.FC = () => {
         handleCloseModal();
     };
 
+    // Toggle project visibility for a specific customer
     const toggleProjects = (customerId: number) => {
         setExpandedCustomerId(expandedCustomerId === customerId ? null : customerId);
     };
@@ -161,7 +175,7 @@ const CustomerList: React.FC = () => {
                                 <strong>Id: {customer.id}</strong><br />
                                 <strong>{customer.name}</strong> ({customer.code})<br />
                                 Responsible: {customer.responsiblePerson}<br />
-                                Customer since: {new Date(customer.startDate).toLocaleDateString()} 
+                                Customer since: {new Date(customer.startDate).toLocaleDateString()}
                             </div>
                             <div>
                                 {role !== 'Read' && (

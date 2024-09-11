@@ -19,7 +19,7 @@ const Login: React.FC = () => {
             if (response.ok) {
                 const data = await response.json();
 
-                const token = data.token.result;
+                const token = data.token;
 
                 if (typeof token !== 'string') {
                     throw new Error('Invalid token format');

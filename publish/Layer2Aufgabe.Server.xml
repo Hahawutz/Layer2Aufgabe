@@ -4,7 +4,31 @@
         <name>Layer2Aufgabe.Server</name>
     </assembly>
     <members>
+        <member name="M:AuthController.Login(Login)">
+            <summary>
+            Authenticates the user and generates a JWT token if the credentials are valid.
+            </summary>
+            <param name="model">The login model containing username and password.</param>
+            <returns>Returns a JWT token if the login is successful, otherwise returns Unauthorized.</returns>
+        </member>
+        <member name="M:AuthController.GenerateJwtToken(Microsoft.AspNetCore.Identity.IdentityUser)">
+            <summary>
+            Generates a JWT token for the given user.
+            </summary>
+            <param name="user">The user for whom the token is being generated.</param>
+            <returns>Returns a JWT token as a string.</returns>
+        </member>
+        <member name="M:CustomerController.GetCustomers">
+            <summary>
+            Retrieves a list of all customers along with their associated projects.
+            </summary>
+        </member>
         <member name="M:CustomerController.GetCustomer(System.Int32)">
+             <summary>
+             Retrieves a specific customer by ID, including their projects.
+             </summary>
+             <param name="id">The ID of the customer.</param>
+             <returns>The requested customer or NotFound if the customer does not exist.</returns>
              <remarks>
              Example Request:
             
@@ -14,7 +38,20 @@
             
              </remarks>
         </member>
+        <member name="M:CustomerController.PostCustomer(Customer)">
+            <summary>
+            Creates a new customer.
+            </summary>
+            <param name="customer">The customer object to be created.</param>
+            <returns>Returns the newly created customer and sets the Location header to the new customer's URL.</returns>
+        </member>
         <member name="M:CustomerController.PutCustomer(System.Int32,Customer)">
+             <summary>
+             Updates an existing customer based on the ID.
+             </summary>
+             <param name="id">The ID of the customer to be updated.</param>
+             <param name="customer">The updated customer object.</param>
+             <returns>NoContent if the update was successful, or the appropriate error response.</returns>
              <remarks>
              Example Request:
             
@@ -28,7 +65,31 @@
             
              </remarks>
         </member>
+        <member name="M:CustomerController.DeleteCustomer(System.Int32)">
+            <summary>
+            Deletes a customer based on the ID.
+            </summary>
+            <param name="id">The ID of the customer to be deleted.</param>
+            <returns>NoContent if the customer was successfully deleted, or NotFound if the customer does not exist.</returns>
+        </member>
+        <member name="M:CustomerController.CustomerExists(System.Int32)">
+            <summary>
+            Checks if a customer with the given ID exists.
+            </summary>
+            <param name="id">The ID of the customer.</param>
+            <returns>True if the customer exists, otherwise False.</returns>
+        </member>
+        <member name="M:ProjectController.GetProject">
+            <summary>
+            Retrieves a list of all projects along with their associated customer and customer's projects.
+            </summary>
+        </member>
         <member name="M:ProjectController.GetProject(System.Int32)">
+             <summary>
+             Retrieves a specific project by ID, including its associated customer.
+             </summary>
+             <param name="id">The ID of the project.</param>
+             <returns>The requested project or NotFound if the project does not exist.</returns>
              <remarks>
              Example Request:
             
@@ -38,7 +99,20 @@
             
              </remarks>
         </member>
+        <member name="M:ProjectController.CreateProject(Project)">
+            <summary>
+            Creates a new project associated with a customer.
+            </summary>
+            <param name="project">The project object to be created.</param>
+            <returns>Returns the newly created project or an error if the operation fails.</returns>
+        </member>
         <member name="M:ProjectController.UpdateProject(System.Int32,Project)">
+             <summary>
+             Updates an existing project based on the ID.
+             </summary>
+             <param name="id">The ID of the project to be updated.</param>
+             <param name="project">The updated project object.</param>
+             <returns>NoContent if the update was successful, or an appropriate error response.</returns>
              <remarks>
              Example Request:
             
@@ -54,6 +128,11 @@
              </remarks>
         </member>
         <member name="M:ProjectController.DeleteProject(System.Int32)">
+             <summary>
+             Deletes a project based on the ID.
+             </summary>
+             <param name="id">The ID of the project to be deleted.</param>
+             <returns>NoContent if the project was successfully deleted, or NotFound if the project does not exist.</returns>
              <remarks>
              Example Request:
             
@@ -62,6 +141,13 @@
                  }
             
              </remarks>
+        </member>
+        <member name="M:ProjectController.ProjectExists(System.Int32)">
+            <summary>
+            Checks if a project with the given ID exists.
+            </summary>
+            <param name="id">The ID of the project.</param>
+            <returns>True if the project exists, otherwise False.</returns>
         </member>
         <member name="T:Layer2Aufgabe.Server.Migrations.InitialCreate">
             <inheritdoc />

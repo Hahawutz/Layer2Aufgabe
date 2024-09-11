@@ -25,6 +25,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
     onSubmit,
     initialData = {},
 }) => {
+    // Initial project state
     const [project, setProject] = useState<Project>({
         id: 0,
         name: '',
@@ -35,8 +36,12 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
         customerId: 0,
     });
 
+    // State to store form validation errors
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+    /**
+     * useEffect to update the form with initialData when modal is shown.
+     */
     useEffect(() => {
         if (show && initialData) {
             setProject({
@@ -51,27 +56,38 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
         }
     }, [initialData, show]);
 
+    /**
+     * Handles input changes and updates the project state.
+     */
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setProject({ ...project, [name]: value });
     };
 
+    /**
+     * Validates the form fields.
+     * Returns an object with error messages for each invalid field.
+     */
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
 
-        if (!project.name) newErrors.name = ' Project name is required.';
+        if (!project.name) newErrors.name = 'Project name is required.';
         if (!project.description) newErrors.description = 'Project description is required.';
-        if (!project.startDate) newErrors.startDate = ' Start date is required.';
-        if (!project.endDate) newErrors.endDate = ' End date is required.';
-        if (!project.responsiblePerson) newErrors.responsiblePerson = ' Responsible person is required.';
-        if (!project.customerId) newErrors.customerId = ' Customer ID is required.';
+        if (!project.startDate) newErrors.startDate = 'Start date is required.';
+        if (!project.endDate) newErrors.endDate = 'End date is required.';
+        if (!project.responsiblePerson) newErrors.responsiblePerson = 'Responsible person is required.';
+        if (!project.customerId) newErrors.customerId = 'Customer ID is required.';
 
         return newErrors;
     };
 
+    /**
+     * Handles form submission, performs validation and calls the onSubmit function.
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Validate form inputs
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -80,6 +96,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
 
         const currentDate = new Date().toISOString();
 
+        // Prepare the project object to be submitted
         const formattedProject: Project = {
             id: initialData.id || 0,
             name: project.name,
@@ -90,6 +107,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
             customerId: project.customerId,
         };
 
+        // Submit the project data
         await onSubmit(formattedProject);
         handleClose();
     };
@@ -182,7 +200,7 @@ const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                     </div>
 
                     <Button variant="primary" type="submit">
-                        {initialData.id ? 'Safe' : 'Add'}
+                        {initialData.id ? 'Save' : 'Add'}
                     </Button>
                 </form>
             </Modal.Body>
