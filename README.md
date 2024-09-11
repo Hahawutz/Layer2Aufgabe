@@ -16,7 +16,7 @@ Das **Frontend** habe ich mit **React** und **TypeScript** entwickelt.
 
 **Projekt anschauen**  
 
-Ich habe das Projekt auf Azure geladen und man es dort Testen.  
+Ich habe das Projekt auf Azure hochgeladen, und es kann dort getestet werden.  
 Frontend: http://layer2aufgabeserver20240911164841.azurewebsites.net  
 Backend-API: http://layer2aufgabeserver20240911164841.azurewebsites.net/swagger/index.html  
 
