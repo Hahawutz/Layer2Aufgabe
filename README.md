@@ -14,6 +14,10 @@ Das **Frontend** habe ich mit **React** und **TypeScript** entwickelt.
 
 # Anleitung zum Starten des Projekts
 
+**Projekt anschauen**  
+
+Ich habe das Projekt auf Azure geladen und man es dort Testen: http://layer2aufgabeserver20240911164841.azurewebsites.net
+
 **Projekt klonen**  
    Zuerst das Projekt von dem Repository klonen.
 
