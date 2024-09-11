@@ -32,9 +32,9 @@ Der Server läuft dann auf `https://localhost:7073/`.
 
 Um das Frontend aufzurufen, reicht es, die Seite `https://localhost:7073/` zu öffnen. Wenn Sie die **API-Dokumentation** anschauen möchtet, können Sie diese unter `https://localhost:7073/swagger/index.html` öffnen.
 
-Im Frontend gelangen Sie dann auf eine **Login Page**. Ich habe eine Benutzerverwaltung mit **Read**, **Write** und **Admin** Rechten implementiert. Diese drei Benutzer werden beim Programmstart automatisch erstellt. Mir ist bewusst, dass dies keine gängige Methode ist und ich dies in einem Produktionssystem nicht machen würde, aber hier dient es nur dem Test.
+### Login:
 
-### Einlog-Daten:
+Im Frontend gelangen Sie dann auf eine **Login Page**. Ich habe eine Benutzerverwaltung mit **Read**, **Write** und **Admin** Rechten implementiert. Diese drei Benutzer werden beim Programmstart automatisch erstellt. Mir ist bewusst, dass dies keine gängige Methode ist und ich dies in einem Produktionssystem nicht machen würde, aber hier dient es nur dem Test.
 
 **Admin (Darf alles):**
 - Benutzername: `Admin`
