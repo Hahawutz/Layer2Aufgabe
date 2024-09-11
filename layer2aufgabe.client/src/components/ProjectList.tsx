@@ -20,10 +20,12 @@ interface Project {
     customer?: Customer;
 }
 
+// Fetch the user's role from localStorage
 const getRoleFromLocalStorage = () => {
     return localStorage.getItem('role');
 };
 
+// Fetch the JWT token from localStorage
 const getTokenFromLocalStorage = () => {
     return localStorage.getItem('token');
 };
@@ -34,11 +36,10 @@ const ProjectList: React.FC = () => {
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [expandedProjectId, setExpandedProjectId] = useState<number | null>(null);
 
-
     const role = getRoleFromLocalStorage();
-    // JWT-Token abrufen
     const token = getTokenFromLocalStorage();
 
+    // Fetch the list of projects from the API
     const fetchProjects = async () => {
         try {
             const response = await fetch('https://localhost:7073/api/Project', {
@@ -51,28 +52,33 @@ const ProjectList: React.FC = () => {
                 throw new Error('Error when retrieving the project list');
             }
             const data: Project[] = await response.json();
-            setProjects(data);
+            setProjects(data); // Set the project list state
         } catch (error) {
             console.error('Error when retrieving the project list:', error);
         }
     };
 
+    // Fetch projects on component mount
     useEffect(() => {
         fetchProjects();
     }, []);
 
+    // Close the modal
     const handleCloseModal = () => setShowModal(false);
+
+    // Show the modal to add or edit a project
     const handleShowModal = (project: Project | null = null) => {
         setSelectedProject(project);
         setShowModal(true);
     };
 
+    // Add a new project
     const addProject = async (newProject: Omit<Project, 'id'>) => {
         try {
             const response = await fetch('https://localhost:7073/api/Project', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`, 
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(newProject),
@@ -82,12 +88,13 @@ const ProjectList: React.FC = () => {
                 throw new Error(`Error when adding the project: ${response.statusText}`);
             }
 
-            await fetchProjects();
+            await fetchProjects(); // Refresh the project list
         } catch (error) {
             console.error('Error when adding the project:', error);
         }
     };
 
+    // Update an existing project
     const updateProject = async (updatedProject: Project) => {
         try {
             const response = await fetch(`https://localhost:7073/api/Project/${updatedProject.id}`, {
@@ -103,12 +110,13 @@ const ProjectList: React.FC = () => {
                 throw new Error(`Error when updating the project: ${response.statusText}`);
             }
 
-            await fetchProjects();
+            await fetchProjects(); // Refresh the project list
         } catch (error) {
             console.error('Error when updating the project:', error);
         }
     };
 
+    // Delete a project
     const deleteProject = async (projectId: number) => {
         try {
             const response = await fetch(`https://localhost:7073/api/Project/${projectId}`, {
@@ -122,12 +130,13 @@ const ProjectList: React.FC = () => {
                 throw new Error(`Error when deleting the project: ${response.statusText}`);
             }
 
-            await fetchProjects();
+            await fetchProjects(); // Refresh the project list
         } catch (error) {
             console.error('Error when deleting the project:', error);
         }
     };
 
+    // Handle form submission for adding or updating a project
     const handleSubmit = async (project: Project) => {
         if (project.id) {
             await updateProject(project);
@@ -137,6 +146,7 @@ const ProjectList: React.FC = () => {
         handleCloseModal();
     };
 
+    // Toggle displaying customer details for a project
     const toggleCustomerDetails = (projectId: number) => {
         setExpandedProjectId(expandedProjectId === projectId ? null : projectId);
     };
@@ -151,7 +161,7 @@ const ProjectList: React.FC = () => {
                         className="btn btn-success"
                         onClick={() => handleShowModal()}
                     >
-                        Add Project 
+                        Add Project
                     </button>
                 )}
             </div>

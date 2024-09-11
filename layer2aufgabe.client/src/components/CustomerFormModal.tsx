@@ -33,6 +33,7 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
     onSubmit,
     initialData = {},
 }) => {
+    // Customer state for form fields
     const [customer, setCustomer] = useState<Customer>({
         id: 0,
         name: '',
@@ -42,10 +43,16 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
         projects: []
     });
 
+    // State for validation errors
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+    /**
+     * useEffect hook to set the form fields based on initialData.
+     * This runs when the modal is opened (show is true) or initialData changes.
+     */
     useEffect(() => {
         if (show && initialData?.id) {
+            // Set form with initial customer data for editing
             setCustomer({
                 id: initialData.id || 0,
                 name: initialData.name || '',
@@ -55,6 +62,7 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 projects: initialData.projects || []
             });
         } else if (show && !initialData?.id) {
+            // Reset form when adding a new customer
             setCustomer({
                 id: 0,
                 name: '',
@@ -66,11 +74,23 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
         }
     }, [initialData, show]);
 
+    /**
+     * Handles input changes in the form.
+     * Updates the corresponding state value based on the field name.
+     * 
+     * @param e - The input change event
+     */
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setCustomer({ ...customer, [name]: value });
     };
 
+    /**
+     * Validates the form fields.
+     * Checks if all required fields are filled.
+     * 
+     * @returns An object containing error messages for each invalid field
+     */
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
 
@@ -82,29 +102,47 @@ const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
         return newErrors;
     };
 
-    const getISO8601Format = (date: string) => {
+    /**
+ * Formats the date using the local timezone.
+ * 
+ * @param date - The date string to be formatted
+ * @returns The date
+ */
+    const getDateFormat = (date: string) => {
         const dateObj = new Date(date);
-        return dateObj.toISOString();
+        const tzOffset = dateObj.getTimezoneOffset() * 60000; // Offset in milliseconds
+        const localISOTime = new Date(dateObj.getTime() - tzOffset).toISOString().slice(0, -1); // Remove the "Z" at the end
+        return localISOTime;
     };
 
+
+    /**
+     * Handles the form submission.
+     * Validates the form, formats the data, and calls the onSubmit callback.
+     * 
+     * @param e - The form submit event
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Validate form fields
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
 
+        // Prepare the customer data to be submitted
         const formattedCustomer: Customer = {
             id: customer.id,
             name: customer.name,
             code: customer.code,
             responsiblePerson: customer.responsiblePerson,
-            startDate: getISO8601Format(customer.startDate),
+            startDate: getDateFormat(customer.startDate),
             projects: customer.projects,
         };
 
+        // Submit the customer data
         await onSubmit(formattedCustomer);
         handleClose();
     };
