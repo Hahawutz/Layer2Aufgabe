@@ -44,3 +44,21 @@ Im Frontend gelangen Sie dann auf eine **Login Page**. Ich habe eine Benutzerver
 
 Um die **API** zu testen, muss man sich ebenfalls zuerst einloggen und einen Token erstellen. Nutze dazu die `POST /api/Auth/login` und geben Sie einfach einen der oben genannten Benutzer im **Request Body** ein. Dann können Sie den Token aus der Response kopieren auf den **Authorize** Button klicken und im Value Feld eingeben.
 
+
+### Quellen:
+https://learn.microsoft.com/en-us/aspnet/entity-framework
+https://www.w3schools.com/react/default.asp
+https://www.oreilly.com/library/view/c-in-a/0596001819/ch04s10.html
+https://jwt.io/
+https://swagger.io/specification/
+https://www.telerik.com/blogs/asp-net-core-basics-authentication-authorization-jwt
+https://chatgpt.com/
+https://codewithmukesh.com/blog/aspnet-core-api-with-jwt-authentication/
+https://www.youtube.com/
+https://stackoverflow.com/
+https://learn.microsoft.com/en-us/aspnet/core/?view=aspnetcore-8.0
+https://gemini.google.com/app?hl=en
+https://learn.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-8.0
+https://learn.microsoft.com/en-us/ef/core/
+https://identityserver4.readthedocs.io/en/latest/
+https://www.typescriptlang.org/docs/handbook/intro.html
