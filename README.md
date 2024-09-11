@@ -48,7 +48,7 @@ Im Frontend gelangen Sie dann auf eine **Login Page**. Ich habe eine Benutzerver
 - Benutzername: `Write`
 - Passwort: `Write@123`
 
-Um die **API** zu testen, muss man sich ebenfalls zuerst einloggen und einen Token erstellen. Nutze dazu die `POST /api/Auth/login` und geben Sie einfach einen der oben genannten Benutzer im **Request Body** ein. Dann können Sie den Token aus der Response kopieren auf den **Authorize** Button klicken und im Value Feld eingeben.
+Um die **API** zu testen, muss man sich ebenfalls zuerst einloggen und einen Token erstellen. Nutzen Sie dazu die `POST /api/Auth/login` und geben Sie einfach einen der oben genannten Benutzer im **Request Body** ein. Dann können Sie den Token aus der Response kopieren auf den **Authorize** Button klicken und im Value Feld eingeben.
 
 
 ### Quellen:
