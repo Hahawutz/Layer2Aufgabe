@@ -14,6 +14,8 @@ Das **Frontend** habe ich mit **React** und **TypeScript** entwickelt.
 
 # Anleitung zum Starten des Projekts
 
+Ich möchte vorab darauf hinweisen, dass ich die Anwendung auf einem 27-Zoll-Bildschirm in Google Chrome getestet habe und die Anwendung dafür optimiert ist.
+
 **Projekt anschauen**  
 
 Ich habe das Projekt auf Azure hochgeladen, und es kann dort getestet werden.  
