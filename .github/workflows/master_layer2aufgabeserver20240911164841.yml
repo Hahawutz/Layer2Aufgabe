@@ -1,4 +1,7 @@
-name: Build and deploy ASP.Net Core app to Azure Web App
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core app to Azure Web App - Layer2AufgabeServer20240911164841
 
 on:
   push:
@@ -11,57 +14,52 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4  # Checkout der Repository
+      - uses: actions/checkout@v4
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0'  # Version von .NET Core, die verwendet werden soll
+          dotnet-version: '3.1'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release  # Build der Lösung im Release-Modus
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ./publish  # Publizieren der Anwendung in den Ordner './publish'
-
-      - name: List files in publish folder
-        run: dir ./publish  # Überprüfen, ob die Dateien im publish-Ordner vorhanden sind
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ./publish  # Der Ordner, der die veröffentlichten Dateien enthält
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: windows-latest
-    needs: build  # Der Deploy-Schritt wird nur ausgeführt, wenn der Build-Schritt erfolgreich war
+    needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}  # URL der bereitgestellten App
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write  # Erforderlich für den Azure-Login mit JWT
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app  # Download des veröffentlichten Artifakts
-
-      - name: List downloaded files for debugging
-        run: dir ./publish  # Überprüfen, ob die heruntergeladenen Dateien im 'publish' Ordner vorhanden sind
-
+          name: .net-app
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_919833F240984C02983464F07A853CF6 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C30F56DD0C634064AA2A521918B11789 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A339F8A3003649D69E82210A92D591BE }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'your-app-name'  # Name deiner Azure Web App
+          app-name: 'Layer2AufgabeServer20240911164841'
           slot-name: 'Production'
-          package: './publish'  # Der Ordner mit den veröffentlichten Dateien
+          package: .
+          
