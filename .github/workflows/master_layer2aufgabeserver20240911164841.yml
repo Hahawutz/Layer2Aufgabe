@@ -16,13 +16,13 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0'  # Make sure to use the correct .NET version
+          dotnet-version: '8.0'  # Ensure to use the correct .NET version
 
       - name: Build with dotnet
         run: dotnet build --configuration Release  # Build the solution in Release mode
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ./publish  # Publish the app to the 'publish' folder
+        run: dotnet publish -c Release -o ./publish  # Publish to 'publish' folder
 
       - name: List files in publish directory for debugging
         run: dir ./publish  # List files in the 'publish' folder for debugging
@@ -35,7 +35,7 @@ jobs:
 
   deploy:
     runs-on: windows-latest
-    needs: build  # Ensure the 'deploy' job runs after 'build' completes
+    needs: build  # Ensure 'deploy' runs after 'build' completes
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -47,6 +47,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+
+      - name: List downloaded files for debugging
+        run: dir ./publish  # Verify the contents of the downloaded folder
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -60,5 +63,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Layer2AufgabeServer20240911164841'
-          slot-name: 'Production'  # You can modify the slot name if needed
-          package: '${{ github.workspace }}/publish'  # Use full path to the 'publish' folder
+          slot-name: 'Production'
+          package: './publish'  # Use the correct path to the 'publish' folder
