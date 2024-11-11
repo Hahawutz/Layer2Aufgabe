@@ -22,16 +22,15 @@ jobs:
         run: dotnet build --configuration Release  # Build the solution in Release mode
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ./publish  # Publish to 'publish' folder
-
-      - name: List files in publish directory for debugging
-        run: dir ./publish  # List files in the 'publish' folder for debugging
+        run: |
+          dotnet publish -c Release -o ./publish  # Publish to the './publish' directory
+          dir ./publish  # Debugging: List files in the publish directory
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ./publish  # Upload the 'publish' directory for the deployment job
+          path: ./publish  # Upload the publish folder for the deployment job
 
   deploy:
     runs-on: windows-latest
