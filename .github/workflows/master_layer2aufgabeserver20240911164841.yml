@@ -24,6 +24,9 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release -o ./publish  # Publish the app to the 'publish' folder
 
+      - name: List files in publish directory for debugging
+        run: dir ./publish  # List files in the 'publish' folder for debugging
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -56,6 +59,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'Layer2AufgabeServer20240911164841'  # Your Azure Web App name
+          app-name: 'Layer2AufgabeServer20240911164841'
           slot-name: 'Production'  # You can modify the slot name if needed
-          package: './publish'  # Path to the 'publish' directory (build output)
+          package: '${{ github.workspace }}/publish'  # Use full path to the 'publish' folder
