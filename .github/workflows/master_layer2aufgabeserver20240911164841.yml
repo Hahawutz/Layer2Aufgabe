@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - Layer2AufgabeServer20240911164841
 
 on:
@@ -21,17 +18,43 @@ jobs:
         with:
           dotnet-version: '3.1'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      # Build and publish the Server app
+      - name: Build Server
+        run: dotnet build Layer2Aufgabe.Server/Layer2Aufgabe.Server.csproj --configuration Release
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+      - name: Publish Server
+        run: dotnet publish Layer2Aufgabe.Server/Layer2Aufgabe.Server.csproj -c Release -o ./publish/server
 
-      - name: Upload artifact for deployment job
+      # Upload the server artifact
+      - name: Upload Server Artifact for Deployment
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: server-app
+          path: ./publish/server
+
+      # Build and publish the Client app
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Version anpassen, falls erforderlich
+
+      - name: Build Client
+        working-directory: ./layer2aufgabe.client
+        run: |
+          npm install
+          npm run build
+
+      - name: Publish Client
+        run: |
+          mkdir -p ./publish/client
+          cp -r ./layer2aufgabe.client/dist/* ./publish/client
+
+      # Upload the client artifact
+      - name: Upload Client Artifact for Deployment
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-app
+          path: ./publish/client
 
   deploy:
     runs-on: windows-latest
@@ -40,14 +63,21 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
-      - name: Download artifact from build job
+      - name: Download Server Artifact from Build Job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
-      
+          name: server-app
+          path: ./publish/server
+
+      - name: Download Client Artifact from Build Job
+        uses: actions/download-artifact@v4
+        with:
+          name: client-app
+          path: ./publish/client
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -55,11 +85,20 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C30F56DD0C634064AA2A521918B11789 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A339F8A3003649D69E82210A92D591BE }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+      # Deploy Server to Azure Web App
+      - name: Deploy Server to Azure Web App
+        id: deploy-server
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Layer2AufgabeServer20240911164841'
           slot-name: 'Production'
-          package: .
-          
+          package: ./publish/server
+
+      # Deploy Client to Azure Web App (separates Deployment wenn nötig)
+      - name: Deploy Client to Azure Web App
+        id: deploy-client
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'Layer2AufgabeClient20240911164841'  # Name der Client-Azure Web App anpassen
+          slot-name: 'Production'
+          package: ./publish/client
