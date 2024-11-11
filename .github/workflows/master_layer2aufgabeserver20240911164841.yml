@@ -1,3 +1,6 @@
+# Dokumentation für die Azure Web Apps Deploy Action: https://github.com/Azure/webapps-deploy
+# Weitere GitHub Actions für Azure: https://github.com/Azure/actions
+
 name: Build and deploy ASP.Net Core app to Azure Web App - Layer2AufgabeServer20240911164841
 
 on:
@@ -16,45 +19,37 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '3.1'
+          dotnet-version: '3.1' # Setze hier die verwendete .NET Version
 
-      # Build and publish the Server app
-      - name: Build Server
-        run: dotnet build Layer2Aufgabe.Server/Layer2Aufgabe.Server.csproj --configuration Release
+      - name: Build Server Project
+        run: dotnet build Layer2Aufgabe/Layer2Aufgabe.Server/Layer2Aufgabe.Server.csproj --configuration Release
 
-      - name: Publish Server
-        run: dotnet publish Layer2Aufgabe.Server/Layer2Aufgabe.Server.csproj -c Release -o ./publish/server
+      - name: Publish Server Project
+        run: dotnet publish Layer2Aufgabe/Layer2Aufgabe.Server/Layer2Aufgabe.Server.csproj -c Release -o ./publish/server
 
-      # Upload the server artifact
-      - name: Upload Server Artifact for Deployment
-        uses: actions/upload-artifact@v4
-        with:
-          name: server-app
-          path: ./publish/server
-
-      # Build and publish the Client app
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '16' # Setze hier die verwendete Node.js Version für das Client-Projekt
 
-      - name: Build Client
-        working-directory: ./layer2aufgabe.client
-        run: |
-          npm install
-          npm run build
+      - name: Install Client Dependencies
+        working-directory: Layer2Aufgabe/layer2aufgabe.client
+        run: npm install
 
-      - name: Publish Client
+      - name: Build Client Project
+        working-directory: Layer2Aufgabe/layer2aufgabe.client
+        run: npm run build
+
+      - name: Move Client Build to Publish Directory
         run: |
           mkdir -p ./publish/client
-          cp -r ./layer2aufgabe.client/dist/* ./publish/client
+          cp -R Layer2Aufgabe/layer2aufgabe.client/dist/* ./publish/client
 
-      # Upload the client artifact
-      - name: Upload Client Artifact for Deployment
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: client-app
-          path: ./publish/client
+          name: app-package
+          path: ./publish
 
   deploy:
     runs-on: windows-latest
@@ -63,20 +58,13 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write
+      id-token: write # Erforderlich für JWT-Authentifizierung
 
     steps:
-      - name: Download Server Artifact from Build Job
+      - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: server-app
-          path: ./publish/server
-
-      - name: Download Client Artifact from Build Job
-        uses: actions/download-artifact@v4
-        with:
-          name: client-app
-          path: ./publish/client
+          name: app-package
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -85,11 +73,18 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      # Deploy both Client and Server to the same Azure Web App
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+      - name: Deploy Server to Azure Web App
+        id: deploy-server
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'Layer2AufgabeServer20240911164841'  # Name der Web App des Servers verwenden
+          app-name: 'Layer2AufgabeServer20240911164841' # Name der Azure Web App für den Server
           slot-name: 'Production'
-          package: ./publish
+          package: ./publish/server
+
+      - name: Deploy Client to Azure Web App
+        id: deploy-client
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'Layer2AufgabeClient20240911164841' # Name der Azure Web App für den Client
+          slot-name: 'Production'
+          package: ./publish/client
