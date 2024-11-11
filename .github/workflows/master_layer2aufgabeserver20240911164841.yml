@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - Layer2AufgabeServer20240911164841
 
 on:
@@ -19,19 +16,19 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '3.1'
+          dotnet-version: '8.0'  # Replace with your project's .NET version
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish -c Release -o ./myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./myapp
 
   deploy:
     runs-on: windows-latest
@@ -40,7 +37,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write
 
     steps:
       - name: Download artifact from build job
@@ -51,9 +48,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0CB60CAAFB394D1386CA01F57D1D9B8F }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C9F758BBDF0E4FD5A0FCBE8BBB1A768E }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E0DC6C84289B482ABE5AB8A8C0C9017A }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F70D121D94C3489C8C7AC46BC5EECABD }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7B9C4814BEC14D9EBA9A9F54E4F3E9FD }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F3914FE79AC947CBBDA567A52319F494 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -61,5 +58,4 @@ jobs:
         with:
           app-name: 'Layer2AufgabeServer20240911164841'
           slot-name: 'Production'
-          package: .
-          
+          package: ./myapp  # Path to published files
