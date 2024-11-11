@@ -11,45 +11,40 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4  # Checkout the repository
+      - uses: actions/checkout@v4
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0'  # Ensure to use the correct .NET version
+          dotnet-version: '3.1'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release  # Build the solution in Release mode
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: |
-          dotnet publish -c Release -o ./publish  # Publish to the './publish' directory
-          dir ./publish  # Debugging: List files in the publish directory
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/Layer2Aufgabe.Server"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ./publish  # Upload the publish folder for the deployment job
+          path: ${{env.DOTNET_ROOT}}/Layer2Aufgabe.Server
 
   deploy:
     runs-on: windows-latest
-    needs: build  # Ensure 'deploy' runs after 'build' completes
+    needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write  # Required for Azure login with JWT
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-
-      - name: List downloaded files for debugging
-        run: dir ./publish  # Verify the contents of the downloaded folder
-
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -63,4 +58,4 @@ jobs:
         with:
           app-name: 'Layer2AufgabeServer20240911164841'
           slot-name: 'Production'
-          package: './publish'  # Use the correct path to the 'publish' folder
+          package: './Layer2Aufgabe.Server'  # Make sure this matches your actual output folder name
