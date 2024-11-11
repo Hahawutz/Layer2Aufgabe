@@ -1,4 +1,4 @@
-name: Build and deploy ASP.Net Core app to Azure Web App - Layer2AufgabeServer20240911164841
+name: Build and deploy ASP.Net Core app to Azure Web App
 
 on:
   push:
@@ -11,51 +11,57 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4  # Checkout the repository
+      - uses: actions/checkout@v4  # Checkout der Repository
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0'  # Make sure to use the correct .NET version
+          dotnet-version: '8.0'  # Version von .NET Core, die verwendet werden soll
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release  # Build the solution in Release mode
+        run: dotnet build --configuration Release  # Build der Lösung im Release-Modus
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ./publish  # Publish the app to the 'publish' folder
+        run: dotnet publish -c Release -o ./publish  # Publizieren der Anwendung in den Ordner './publish'
+
+      - name: List files in publish folder
+        run: dir ./publish  # Überprüfen, ob die Dateien im publish-Ordner vorhanden sind
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ./publish  # Upload the 'publish' directory for the deployment job
+          path: ./publish  # Der Ordner, der die veröffentlichten Dateien enthält
 
   deploy:
     runs-on: windows-latest
-    needs: build  # Ensure the 'deploy' job runs after 'build' completes
+    needs: build  # Der Deploy-Schritt wird nur ausgeführt, wenn der Build-Schritt erfolgreich war
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}  # URL der bereitgestellten App
     permissions:
-      id-token: write  # Required for Azure login with JWT
+      id-token: write  # Erforderlich für den Azure-Login mit JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: .net-app  # Download des veröffentlichten Artifakts
+
+      - name: List downloaded files for debugging
+        run: dir ./publish  # Überprüfen, ob die heruntergeladenen Dateien im 'publish' Ordner vorhanden sind
 
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F70D121D94C3489C8C7AC46BC5EECABD }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7B9C4814BEC14D9EBA9A9F54E4F3E9FD }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F3914FE79AC947CBBDA567A52319F494 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'Layer2AufgabeServer20240911164841'  # Your Azure Web App name
-          slot-name: 'Production'  # You can modify the slot name if needed
-          package: './publish'  # Path to the 'publish' directory (build output)
+          app-name: 'your-app-name'  # Name deiner Azure Web App
+          slot-name: 'Production'
+          package: './publish'  # Der Ordner mit den veröffentlichten Dateien
