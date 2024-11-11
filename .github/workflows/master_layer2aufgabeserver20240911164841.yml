@@ -16,13 +16,18 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0'  # Replace with your project's .NET version
+          dotnet-version: '8.0'  # Replace with your project’s .NET version
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Install npm dependencies
+        working-directory: ./layer2aufgabe.client
+        run: npm install
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ./myapp
+      - name: Run npm build
+        working-directory: ./layer2aufgabe.client
+        run: npm run build
+
+      - name: dotnet publish Server Project
+        run: dotnet publish D:\a\Layer2Aufgabe\Layer2Aufgabe\Layer2Aufgabe.Server\Layer2Aufgabe.Server.csproj -c Release -o ./myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -44,7 +49,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -58,4 +63,4 @@ jobs:
         with:
           app-name: 'Layer2AufgabeServer20240911164841'
           slot-name: 'Production'
-          package: ./myapp  # Path to published files
+          package: ./myapp
