@@ -36,7 +36,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16' # Version anpassen, falls erforderlich
+          node-version: '16'
 
       - name: Build Client
         working-directory: ./layer2aufgabe.client
@@ -63,7 +63,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # This is required for requesting the JWT
+      id-token: write
 
     steps:
       - name: Download Server Artifact from Build Job
@@ -81,24 +81,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_919833F240984C02983464F07A853CF6 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C30F56DD0C634064AA2A521918B11789 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A339F8A3003649D69E82210A92D591BE }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      # Deploy Server to Azure Web App
-      - name: Deploy Server to Azure Web App
-        id: deploy-server
+      # Deploy both Client and Server to the same Azure Web App
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'Layer2AufgabeServer20240911164841'
+          app-name: 'Layer2AufgabeServer20240911164841'  # Name der Web App des Servers verwenden
           slot-name: 'Production'
-          package: ./publish/server
-
-      # Deploy Client to Azure Web App (separates Deployment wenn nötig)
-      - name: Deploy Client to Azure Web App
-        id: deploy-client
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'Layer2AufgabeClient20240911164841'  # Name der Client-Azure Web App anpassen
-          slot-name: 'Production'
-          package: ./publish/client
+          package: ./publish
