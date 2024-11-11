@@ -2,7 +2,6 @@ import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
-import path from 'path';
 import { env } from 'process';
 
 const target = env.ASPNETCORE_HTTPS_PORT 
