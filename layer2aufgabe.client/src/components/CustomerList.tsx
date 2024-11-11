@@ -156,7 +156,7 @@ const CustomerList: React.FC = () => {
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h2>Customer list</h2>
+                <h2>Customer list 123</h2>
                 {username && <p>Logged in as: {role}</p>}
                 {role !== 'Read' && (
                     <button
