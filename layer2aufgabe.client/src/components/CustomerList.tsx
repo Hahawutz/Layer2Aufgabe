@@ -41,7 +41,7 @@ const CustomerList: React.FC = () => {
     const fetchCustomers = async () => {
         try {
             const token = getToken();
-            const response = await fetch('https://localhost:7073/api/Customer', {
+            const response = await fetch('/api/Customer', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ const CustomerList: React.FC = () => {
     const addCustomer = async (newCustomer: Omit<Customer, 'id'>) => {
         try {
             const token = getToken();
-            const response = await fetch('https://localhost:7073/api/Customer', {
+            const response = await fetch('/api/Customer', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ const CustomerList: React.FC = () => {
     const updateCustomer = async (updatedCustomer: Customer) => {
         try {
             const token = getToken();
-            const response = await fetch(`https://localhost:7073/api/Customer/${updatedCustomer.id}`, {
+            const response = await fetch(`/api/Customer/${updatedCustomer.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ const CustomerList: React.FC = () => {
     const deleteCustomer = async (customerId: number) => {
         try {
             const token = getToken();
-            const response = await fetch(`https://localhost:7073/api/Customer/${customerId}`, {
+            const response = await fetch(`/api/Customer/${customerId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

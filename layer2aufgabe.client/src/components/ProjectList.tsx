@@ -42,7 +42,7 @@ const ProjectList: React.FC = () => {
     // Fetch the list of projects from the API
     const fetchProjects = async () => {
         try {
-            const response = await fetch('https://localhost:7073/api/Project', {
+            const response = await fetch('/api/Project', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ const ProjectList: React.FC = () => {
     // Add a new project
     const addProject = async (newProject: Omit<Project, 'id'>) => {
         try {
-            const response = await fetch('https://localhost:7073/api/Project', {
+            const response = await fetch('/api/Project', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -97,7 +97,7 @@ const ProjectList: React.FC = () => {
     // Update an existing project
     const updateProject = async (updatedProject: Project) => {
         try {
-            const response = await fetch(`https://localhost:7073/api/Project/${updatedProject.id}`, {
+            const response = await fetch(`/api/Project/${updatedProject.id}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -119,7 +119,7 @@ const ProjectList: React.FC = () => {
     // Delete a project
     const deleteProject = async (projectId: number) => {
         try {
-            const response = await fetch(`https://localhost:7073/api/Project/${projectId}`, {
+            const response = await fetch(`/api/Project/${projectId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
